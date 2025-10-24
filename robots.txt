@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://progrebnyakb.github.io/cannabis-website/sitemap.xml
