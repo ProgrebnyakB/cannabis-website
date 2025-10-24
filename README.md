@@ -1,6 +1,6 @@
-# Cannabis Website
+# Borough Botanicals
 
-A simple, responsive website showcasing cannabis and CBD products.
+A simple, responsive website for Borough Botanicals showcasing premium hemp and CBD products.
 
 ## Features
 
