@@ -66,15 +66,8 @@
 
     <section id="contact">
       <h2>Contact</h2>
-      <!-- Using FormSubmit.co to forward form submissions to your email address -->
-      <form method="post" action="https://formsubmit.co/progrebnyakb@gmail.com">
-        <!-- Optional: set subject for incoming email -->
-        <input type="hidden" name="_subject" value="New contact — Borough Botanicals">
-        <!-- After submit redirect back to the site (shows ?submitted=true) -->
-        <input type="hidden" name="_next" value="https://progrebnyakb.github.io/cannabis-website/?submitted=true">
-        <!-- disable FormSubmit captcha (optional) -->
-        <input type="hidden" name="_captcha" value="false">
-
+      <!-- Serverless contact form (posts to Netlify Function) -->
+      <form id="contact-form" method="post" novalidate>
         <label>Name
           <input type="text" name="name" required>
         </label>
@@ -87,16 +80,7 @@
         <div class="form-message" aria-live="polite"></div>
         <button type="submit" class="btn btn-primary">Send</button>
       </form>
-      <!-- show a small message when redirected back after submit -->
-      <script>
-        (function(){
-          const params = new URLSearchParams(window.location.search);
-          if(params.get('submitted') === 'true'){
-            const el = document.querySelector('#contact .form-message');
-            if(el){ el.textContent = 'Thanks — your message was sent. We\'ll reply soon.'; el.classList.add('success'); }
-          }
-        })();
-      </script>
+      <noscript><p>Please enable JavaScript to use the contact form.</p></noscript>
     </section>
   </main>
 

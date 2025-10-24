@@ -91,6 +91,43 @@
         }
         form.reset();
       });
+
+      /* Serverless contact form handler (Netlify/Vercel compatible)
+         Expects a POST to /.netlify/functions/send with JSON {name,email,message}
+      */
+      function initServerlessContact(){
+        const form = document.getElementById('contact-form');
+        if(!form) return;
+        const msgEl = form.querySelector('.form-message');
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          if(msgEl){ msgEl.textContent = ''; msgEl.classList.remove('error','success'); }
+          const fd = new FormData(form);
+          const body = {
+            name: fd.get('name'),
+            email: fd.get('email'),
+            message: fd.get('message')
+          };
+          const submitBtn = form.querySelector('[type="submit"]');
+          if(submitBtn) submitBtn.disabled = true;
+          try{
+            const res = await fetch('/.netlify/functions/send', {
+              method: 'POST',
+              headers: {'Content-Type':'application/json'},
+              body: JSON.stringify(body)
+            });
+            if(!res.ok) throw new Error('Network response was not ok');
+            const data = await res.json();
+            if(msgEl){ msgEl.textContent = 'Thanks — your message was sent. We\'ll reply soon.'; msgEl.classList.add('success'); }
+            form.reset();
+          }catch(err){
+            if(msgEl){ msgEl.textContent = 'Sorry — something went wrong. Please try again later.'; msgEl.classList.add('error'); }
+            console.error('Form submission error', err);
+          }finally{
+            if(submitBtn) submitBtn.disabled = false;
+          }
+        });
+      }
       form.addEventListener('ajax:error', (ev) => {
         const message = form.querySelector('.form-message');
         if(message){
@@ -108,6 +145,7 @@
     initNavToggle();
     initSmoothScroll();
     initAjaxForms();
+      initServerlessContact();
     // add more init calls here (modals, lightbox, analytics setup, etc.)
   }
 

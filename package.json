@@ -1,0 +1,13 @@
+{
+  "name": "borough-botanicals-site",
+  "version": "1.0.0",
+  "description": "Static site with Netlify Functions for contact form",
+  "main": "index.js",
+  "scripts": {
+    "start": "live-server",
+    "build": "echo \"No build step\""
+  },
+  "dependencies": {
+    "@sendgrid/mail": "^7.8.0"
+  }
+}
