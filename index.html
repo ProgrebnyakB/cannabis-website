@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cannabis — Home</title>
+  <meta name="description" content="Premium cannabis products and information." />
+  <link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo">Cannabis</div>
+      <nav class="nav" aria-label="Main Navigation">
+        <a href="#home">Home</a>
+        <a href="#products">Products</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="main-nav">Menu</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="home" class="hero">
+      <div>
+        <p class="kicker">Premium</p>
+        <h1 class="eye-catch">Natural Cannabis Products</h1>
+        <p class="lead">Quality hemp-based products for wellness and relaxation.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#products">Shop products</a>
+          <a class="btn btn-ghost" href="#contact">Contact</a>
+        </div>
+      </div>
+      <aside class="aside card">
+        <h3>Featured</h3>
+        <p class="lead">Try our new CBD tincture.</p>
+        <a class="btn btn-primary" href="#contact">Learn more</a>
+      </aside>
+    </section>
+
+    <section id="products">
+      <h2>Products</h2>
+      <div class="card-grid">
+        <article class="card">
+          <h3>Product 1</h3>
+          <p class="muted">Short description.</p>
+          <a class="btn btn-primary" href="#contact">Buy</a>
+        </article>
+        <article class="card">
+          <h3>Product 2</h3>
+          <p class="muted">Short description.</p>
+          <a class="btn btn-primary" href="#contact">Buy</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="about">
+      <h2>About</h2>
+      <p>We provide carefully curated hemp products. Replace this text with your brand story.</p>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <form data-ajax method="post" action="/send">
+        <label>Name
+          <input type="text" name="name" required>
+        </label>
+        <label>Email
+          <input type="email" name="email" required>
+        </label>
+        <label>Message
+          <textarea name="message" required></textarea>
+        </label>
+        <div class="form-message" aria-live="polite"></div>
+        <button type="submit" class="btn btn-primary">Send</button>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer container">
+    <div class="grid grid-2">
+      <div>© <span id="year">2025</span> Boris Progrebnyak</div>
+      <nav aria-label="Footer Navigation">
+        <a href="#home">Home</a> · <a href="#about">About</a> · <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="scripts/main.js" defer></script>
+  <script>
+    // small enhancement: set current year
+    (function(){ const y = new Date().getFullYear(); const el = document.getElementById('year'); if(el) el.textContent = y; })();
+  </script>
+</body>
+</html>
