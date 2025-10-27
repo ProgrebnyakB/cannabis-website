@@ -13,13 +13,43 @@
   /* Toggle mobile nav: expects .nav and .nav-toggle elements */
   function initNavToggle(){
     const toggle = $('.nav-toggle');
-    const nav = $('.nav');
+    const nav = document.getElementById('main-nav') || $('.nav');
     if(!toggle || !nav) return;
 
     toggle.addEventListener('click', () => {
       const expanded = toggle.getAttribute('aria-expanded') === 'true';
       toggle.setAttribute('aria-expanded', String(!expanded));
       nav.classList.toggle('open');
+    });
+
+    // Close mobile nav when a link is clicked and update aria state
+    if(nav.querySelectorAll){
+      nav.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          if(nav.classList.contains('open')){
+            nav.classList.remove('open');
+            toggle.setAttribute('aria-expanded','false');
+          }
+        });
+      });
+    }
+  }
+
+  /* highlight active link in nav based on current path */
+  function markActiveNav(){
+    const nav = document.getElementById('main-nav');
+    if(!nav) return;
+    const links = Array.from(nav.querySelectorAll('a'));
+    const file = (location.pathname.split('/').pop() || 'index.html');
+    links.forEach(a => {
+      const href = a.getAttribute('href');
+      // treat root as index.html
+      const normalized = href === './' ? 'index.html' : href;
+      if(normalized && (normalized === file || (normalized === 'index.html' && file === ''))){
+        a.classList.add('active');
+      } else {
+        a.classList.remove('active');
+      }
     });
   }
 
@@ -109,7 +139,7 @@
     initNavToggle();
     initSmoothScroll();
     initAjaxForms();
-      initServerlessContact();
+    markActiveNav();
     // add more init calls here (modals, lightbox, analytics setup, etc.)
   }
 
