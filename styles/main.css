@@ -95,8 +95,31 @@ a:hover{text-decoration:underline}
 /* Mobile nav toggle (simple progressive enhancement) */
 .nav-toggle{display:none}
 @media (max-width:700px){
-  .nav{display:none}
-  .nav.open{display:flex; position:absolute; right:1rem; top:64px; background:var(--panel); padding:0.75rem; border-radius:8px; box-shadow:0 12px 30px rgba(10,10,10,0.08); flex-direction:column; gap:0.5rem}
+  /* Mobile: keep nav present but collapsed so we can animate it (avoid display:none which can't be transitioned) */
+  .nav{
+    display:flex;
+    position:absolute;
+    right:1rem;
+    top:64px;
+    background:var(--panel);
+    padding:0.75rem;
+    border-radius:8px;
+    box-shadow:0 12px 30px rgba(10,10,10,0.08);
+    flex-direction:column;
+    gap:0.5rem;
+    transform-origin: top center;
+    transform: scaleY(0);
+    opacity: 0;
+    pointer-events: none; /* prevent interaction when closed */
+    transition: transform 300ms cubic-bezier(.2,.9,.2,1), opacity 220ms ease, box-shadow 220ms ease;
+    will-change: transform, opacity;
+  }
+  /* open state: scale and fade in */
+  .nav.open{
+    transform: scaleY(1);
+    opacity: 1;
+    pointer-events: auto;
+  }
   .nav-toggle{display:inline-block}
 }
 
