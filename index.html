@@ -8,6 +8,10 @@
   <link rel="stylesheet" href="styles/main.css" />
   <!-- inline SVG favicon (small, editable) -->
   <link rel="icon" href='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%25%22 height=%22100%25%22 rx=%2218%22 fill=%22%232f9e44%22 /><text x=%2250%25%22 y=%2255%25%22 font-size=%2238%22 font-family=%22Arial%22 fill=%22white%22 text-anchor=%22middle%22 alignment-baseline=%22middle%22>BB</text></svg>' />
+  <!-- optional favicons (place generated PNGs in assets/) -->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo-32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/logo-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/logo-180.png" />
   <meta name="theme-color" content="#2f9e44" />
   <link rel="canonical" href="https://progrebnyakb.github.io/cannabis-website/" />
   <!-- Open Graph / Twitter -->
@@ -25,7 +29,7 @@
   <header class="site-header">
     <div class="container">
       <div class="logo">
-        <img src="assets/logo.png" alt="Borough Botanicals logo" class="site-logo" />
+        <img src="assets/logo.png" srcset="assets/logo@2x.png 2x" alt="Borough Botanicals logo" class="site-logo" />
         <span class="site-title">Borough Botanicals</span>
       </div>
       <nav id="main-nav" class="nav" aria-label="Main Navigation">
