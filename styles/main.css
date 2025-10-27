@@ -33,7 +33,8 @@ body{
 
 /* Remove default link styles but keep focusable: */
 a{color:var(--brand); text-decoration:none}
-a:hover{text-decoration:underline}
+/* make hover visual also available to keyboard/touch focus */
+a:hover, a:focus{text-decoration:underline}
 
 /* Accessibility: visible focus */
 :focus{outline:3px solid color-mix(in srgb, var(--brand) 30%, white); outline-offset:2px;}
@@ -91,6 +92,8 @@ a:hover{text-decoration:underline}
 .nav a:hover{background:rgba(0,0,0,0.03)}
 /* active link */
 .nav a.active{background:rgba(0,0,0,0.06); font-weight:700}
+/* ensure hover/focus styling for accessibility */
+.nav a:hover, .nav a:focus{background:rgba(0,0,0,0.03); outline:none}
 
 /* Mobile nav toggle (simple progressive enhancement) */
 .nav-toggle{display:none}
@@ -255,4 +258,18 @@ input:focus, textarea:focus{outline:3px solid color-mix(in srgb, var(--brand) 25
     --bg:#08120a; --panel:#0b1410; --text:#eaf3ea; --muted:#bfcfc2;
   }
   a{color:var(--accent)}
+}
+
+/* =========== Touch improvements for coarse pointers (touchscreens) =========== */
+@media (any-pointer: coarse), (pointer: coarse) {
+  /* increase tappable areas for nav links and buttons */
+  .nav a{padding:0.7rem 0.9rem; min-height:44px; display:flex; align-items:center}
+  .nav-toggle{padding:0.6rem 0.85rem}
+  .btn{padding:0.65rem 1rem; min-height:44px}
+
+  /* make cards easier to tap and reduce accidental gestures */
+  .card{touch-action:manipulation; -webkit-tap-highlight-color: rgba(0,0,0,0.06)}
+
+  /* slightly reduce hero gap on small touch devices for better fit */
+  .hero-inner{gap:1rem}
 }
