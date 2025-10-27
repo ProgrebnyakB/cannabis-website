@@ -184,6 +184,19 @@ a:hover, a:focus{text-decoration:underline}
 /* Keep CTAs centered when text is centered */
 .hero-cta{justify-content:center}
 
+/* Ensure hero CTAs share identical primary styling and spacing */
+.hero-cta a{display:inline-block}
+.hero-cta a + a{margin-left:0.75rem}
+.hero-cta a.btn-primary{
+  /* reinforce primary button appearance within hero (safe against other nav styles) */
+  background:linear-gradient(180deg,var(--brand),var(--brand-600));
+  color:white;
+  box-shadow:0 6px 14px rgba(47,158,68,0.14);
+  padding:0.55rem 0.95rem;
+  border-radius:8px;
+  font-weight:600;
+}
+
 /* Simple styles for the mobile nav toggle button */
 .nav-toggle{
   background:transparent;
