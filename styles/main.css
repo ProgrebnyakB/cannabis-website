@@ -87,6 +87,9 @@ a:hover, a:focus{text-decoration:underline}
   padding:1rem 0;
 }
 .logo{font-weight:700; color:var(--brand); font-size:1.15rem}
+.logo{display:flex; align-items:center; gap:0.6rem}
+.site-logo{width:56px; height:56px; object-fit:cover; border-radius:10px; display:block}
+.site-title{font-weight:700; color:var(--brand); font-size:1.05rem}
 .nav{display:flex; gap:1rem; align-items:center}
 .nav a{padding:0.4rem 0.6rem; border-radius:6px; color:var(--text)}
 .nav a:hover{background:rgba(0,0,0,0.03)}
