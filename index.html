@@ -98,10 +98,16 @@
           <div>
             <h3>Get the latest — occasional updates</h3>
             <p class="muted">New drops, lab reports, and promotions. No spam, unsubscribe anytime.</p>
-            <form method="post" action="mailto:progrebnyakb@gmail.com" class="newsletter-form">
+            <!-- Newsletter: using FormSubmit for a no-server forwarding flow. You will need to confirm the first email sent by FormSubmit to activate forwarding. -->
+            <form method="post" action="https://formsubmit.co/progrebnyakb@gmail.com" class="newsletter-form">
+              <input type="hidden" name="_subject" value="Newsletter signup — Borough Botanicals" />
+              <input type="hidden" name="_captcha" value="false" />
+              <!-- optional: after signup redirect to a friendly thank-you URL (update to your preference) -->
+              <input type="hidden" name="_next" value="https://progrebnyakb.github.io/cannabis-website/" />
               <label class="sr-only">Email address</label>
               <input type="email" name="email" placeholder="you@example.com" required style="max-width:320px; padding:.5rem .75rem; border-radius:8px; border:1px solid rgba(10,10,10,0.08);" />
               <button class="btn btn-primary" type="submit">Subscribe</button>
+              <div class="form-message" aria-live="polite" style="margin-top:.5rem; width:100%; text-align:center"></div>
             </form>
           </div>
         </section>
