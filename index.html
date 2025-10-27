@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Borough Botanicals — Home</title>
-  <meta name="description" content="Borough Botanicals — premium hemp and CBD products for wellness and relaxation." />
+  <title>Borough Botanicals — Natural Wellness, Local Care</title>
+  <meta name="description" content="Borough Botanicals — local, lab-tested hemp products crafted for wellness. Discover our story, shop, or get in touch." />
   <link rel="stylesheet" href="styles/main.css" />
   <!-- inline SVG favicon (small, editable) -->
   <link rel="icon" href='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%25%22 height=%22100%25%22 rx=%2218%22 fill=%22%232f9e44%22 /><text x=%2250%25%22 y=%2255%25%22 font-size=%2238%22 font-family=%22Arial%22 fill=%22white%22 text-anchor=%22middle%22 alignment-baseline=%22middle%22>BB</text></svg>' />
@@ -20,66 +20,77 @@
         <a href="products.html">Products</a>
         <a href="about.html">About</a>
         <a href="contact.html">Contact</a>
-      </nav>
-      <button class="nav-toggle" aria-expanded="false" aria-controls="main-nav">Menu</button>
-    </div>
-  </header>
+      <main>
+        <!-- New Home layout: large visual hero, value pillars, testimonial, newsletter CTA -->
+        <section class="hero-landing">
+          <div class="hero-inner container">
+            <div class="hero-copy">
+              <p class="kicker">Locally Made • Lab Tested</p>
+              <h1 class="eye-catch">Borough Botanicals
+              <span class="sub">— Natural hemp-crafted wellness</span></h1>
+              <p class="lead">Small-batch hemp products made with care. We focus on transparency, third-party testing, and sustainable sourcing so you can feel confident about what you use.</p>
+              <div class="hero-cta">
+                <a class="btn btn-primary" href="products.html">Explore Products</a>
+                <a class="btn btn-ghost" href="about.html">Our Story</a>
+              </div>
+            </div>
+            <div class="hero-visual card" aria-hidden="true">
+              <!-- Decorative visual: subtle gradient + stylized leaf SVG -->
+              <div class="visual-plate">
+                <svg width="220" height="220" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="g1" x1="0" x2="1">
+                      <stop offset="0%" stop-color="#dff6e3" />
+                      <stop offset="100%" stop-color="#bbe7c1" />
+                    </linearGradient>
+                  </defs>
+                  <rect width="100" height="100" rx="12" fill="url(#g1)" />
+                  <path d="M20 65c12-18 28-28 42-30" stroke="#2f9e44" stroke-width="3" fill="none" stroke-linecap="round"/>
+                  <path d="M50 55c6-12 18-18 30-20" stroke="#23823a" stroke-width="2" fill="none" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </section>
 
-  <main class="container">
-    <section id="home" class="hero">
-      <div>
-        <p class="kicker">Premium</p>
-        <h1 class="eye-catch">Natural Cannabis Products</h1>
-        <p class="lead">Quality hemp-based products for wellness and relaxation.</p>
-        <div class="hero-cta">
-          <a class="btn btn-primary" href="products.html">Shop products</a>
-          <a class="btn btn-ghost" href="contact.html">Contact</a>
-        </div>
-      </div>
-      <aside class="aside card">
-        <h3>Featured</h3>
-        <p class="lead">Try our new CBD tincture.</p>
-        <a class="btn btn-primary" href="#contact">Learn more</a>
-      </aside>
-    </section>
+        <section class="container pillars">
+          <div class="grid grid-3">
+            <div class="card">
+              <h3>Traceable Quality</h3>
+              <p class="muted">We publish lab results and source information so you know exactly what you're getting.</p>
+            </div>
+            <div class="card">
+              <h3>Sustainably Sourced</h3>
+              <p class="muted">Partners who care for land and people — small-batch practices and ethical supply chains.</p>
+            </div>
+            <div class="card">
+              <h3>Made Locally</h3>
+              <p class="muted">Handcrafted in our neighborhood facilities with attention to detail.</p>
+            </div>
+          </div>
+        </section>
 
-    <section id="products">
-      <h2>Products</h2>
-      <div class="card-grid">
-        <article class="card">
-          <h3>Product 1</h3>
-          <p class="muted">Short description.</p>
-          <a class="btn btn-primary" href="#contact">Buy</a>
-        </article>
-        <article class="card">
-          <h3>Product 2</h3>
-          <p class="muted">Short description.</p>
-          <a class="btn btn-primary" href="#contact">Buy</a>
-        </article>
-      </div>
-    </section>
+        <section class="container testimonial">
+          <div class="card">
+            <blockquote>
+              "The scent, clarity, and consistent effect from Borough Botanicals changed my daily routine — I feel like I'm using something I can trust."
+              <footer>— A. Morgan, local customer</footer>
+            </blockquote>
+          </div>
+        </section>
 
-    <section id="about">
-      <h2>About</h2>
-      <p>We provide carefully curated hemp products. Replace this text with your brand story.</p>
-    </section>
-
-    <section id="contact">
-      <h2>Contact</h2>
-      <!-- Simple FormSubmit form that forwards to your email (no server required) -->
-      <form method="post" action="https://formsubmit.co/progrebnyakb@gmail.com">
-        <input type="hidden" name="_subject" value="New contact — Borough Botanicals">
-        <input type="hidden" name="_captcha" value="false">
-        <label>Name
-          <input type="text" name="name" required>
-        </label>
-        <label>Email
-          <input type="email" name="email" required>
-        </label>
-        <label>Message
-          <textarea name="message" required></textarea>
-        </label>
-        <div class="form-message" aria-live="polite"></div>
+        <section class="container newsletter card">
+          <div>
+            <h3>Get the latest — occasional updates</h3>
+            <p class="muted">New drops, lab reports, and promotions. No spam, unsubscribe anytime.</p>
+            <form method="post" action="mailto:progrebnyakb@gmail.com" class="newsletter-form">
+              <label class="sr-only">Email address</label>
+              <input type="email" name="email" placeholder="you@example.com" required style="max-width:320px; padding:.5rem .75rem; border-radius:8px; border:1px solid rgba(10,10,10,0.08);" />
+              <button class="btn btn-primary" type="submit">Subscribe</button>
+            </form>
+          </div>
+        </section>
+      </main>
         <button type="submit" class="btn btn-primary">Send</button>
       </form>
       <p class="lead" style="margin-top:.5rem;">Or email us directly at <a href="mailto:progrebnyakb@gmail.com">progrebnyakb@gmail.com</a></p>
