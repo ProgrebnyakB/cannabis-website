@@ -66,8 +66,10 @@
 
     <section id="contact">
       <h2>Contact</h2>
-      <!-- Serverless contact form (posts to Netlify Function) -->
-      <form id="contact-form" method="post" novalidate>
+      <!-- Simple FormSubmit form that forwards to your email (no server required) -->
+      <form method="post" action="https://formsubmit.co/progrebnyakb@gmail.com">
+        <input type="hidden" name="_subject" value="New contact — Borough Botanicals">
+        <input type="hidden" name="_captcha" value="false">
         <label>Name
           <input type="text" name="name" required>
         </label>
@@ -80,7 +82,7 @@
         <div class="form-message" aria-live="polite"></div>
         <button type="submit" class="btn btn-primary">Send</button>
       </form>
-      <noscript><p>Please enable JavaScript to use the contact form.</p></noscript>
+      <p class="lead" style="margin-top:.5rem;">Or email us directly at <a href="mailto:progrebnyakb@gmail.com">progrebnyakb@gmail.com</a></p>
     </section>
   </main>
 
