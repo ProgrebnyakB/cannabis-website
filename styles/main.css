@@ -176,6 +176,14 @@ a:hover, a:focus{text-decoration:underline}
   .hero{padding-top:2.5rem; padding-bottom:2.5rem}
 }
 
+/* Center major page blocks on the homepage for a balanced layout */
+.hero-inner{justify-items:center}
+.hero-copy{max-width:680px; margin:0 auto; text-align:center}
+.pillars .card, .testimonial .card, .newsletter.card{text-align:center}
+
+/* Keep CTAs centered when text is centered */
+.hero-cta{justify-content:center}
+
 /* Simple styles for the mobile nav toggle button */
 .nav-toggle{
   background:transparent;

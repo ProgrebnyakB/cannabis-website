@@ -32,3 +32,12 @@ A simple, responsive website for Borough Botanicals showcasing premium hemp and 
 ## License
 
 MIT License - see LICENSE file for details.
+
+## Recent fixes
+
+- Fixed homepage structure and cleaned up header/main nesting to stabilize layout on first paint.
+- Improved responsive hero layout and centered major page blocks (`.hero-copy`, pillars, testimonial, newsletter).
+- Added touch-friendly improvements (larger tap targets, focus styles, touch-action hints).
+- Added Open Graph / Twitter meta tags and a simple OG SVG at `assets/og-image.svg` for better social previews.
+
+If you want to revert any change, look at the commits in the repository or ask me to roll back a specific file.
