@@ -126,8 +126,16 @@ a:hover{text-decoration:underline}
 /* =========== Hero =========== */
 .hero{
   padding:3.5rem 0;
+  /* container wrapper uses .hero-inner for layout so keep outer spacing here */
+  padding-top:3.5rem;
+  padding-bottom:3.5rem;
+}
+/* layout of the hero content wrapper (two columns: copy + visual) */
+.hero-inner{
   display:grid;
-  grid-template-columns:1fr 420px;
+  /* Two columns: flexible copy area and a capped visual column.
+     Use min() so the visual doesn't grow too large on very wide screens. */
+  grid-template-columns: 1fr min(420px, 40%);
   gap:2rem;
   align-items:center;
 }
@@ -141,8 +149,43 @@ a:hover{text-decoration:underline}
 
 /* Stack on small screens */
 @media (max-width:900px){
-  .hero{grid-template-columns:1fr}
+  .hero-inner{grid-template-columns:1fr}
   .hero .aside{order:2}
+}
+
+/* Ensure hero has a comfortable minimum height to avoid content stacking on first paint */
+.hero{min-height:56vh}
+
+/* Visual plate: center and make the SVG responsive */
+.visual-plate{display:flex; align-items:center; justify-content:center}
+.visual-plate svg{width:100%; height:auto; max-width:220px; display:block}
+
+/* Pillars: make cards match heights and keep consistent spacing */
+.pillars .grid{align-items:stretch}
+.pillars .card{display:flex; flex-direction:column; justify-content:flex-start; height:100%}
+
+/* Newsletter form: responsive inline form that wraps on small screens */
+.newsletter-form{display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap}
+.newsletter-form input[type="email"]{flex:1; min-width:160px}
+
+/* Slightly reduce hero padding on medium screens for better rhythm */
+@media (max-width:1100px){
+  .hero{padding-top:2.5rem; padding-bottom:2.5rem}
+}
+
+/* Simple styles for the mobile nav toggle button */
+.nav-toggle{
+  background:transparent;
+  border:1px solid rgba(0,0,0,0.06);
+  padding:0.45rem 0.6rem;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+  color:var(--text);
+}
+
+@media (min-width:701px){
+  .nav-toggle{display:none}
 }
 
 /* =========== Buttons =========== */
