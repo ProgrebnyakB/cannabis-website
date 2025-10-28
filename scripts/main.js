@@ -53,8 +53,158 @@
     });
   }
 
+  }, 10000);
+  }
+
+  /* Education Search Feature */
+  function initEducationSearch() {
+    const searchInput = document.getElementById('education-search');
+    const searchResults = document.getElementById('search-results');
+    const searchResultsList = document.getElementById('search-results-list');
+    const searchCount = document.getElementById('search-count');
+    const clearBtn = document.getElementById('clear-search');
+    
+    if (!searchInput) return; // Not on education page
+    
+    // Build search index from all articles
+    const articles = [];
+    
+    // Get all education articles
+    document.querySelectorAll('.education-article').forEach(article => {
+      const id = article.getAttribute('id');
+      const title = article.querySelector('h2')?.textContent || '';
+      const badge = article.querySelector('.badge')?.textContent || 'General';
+      const content = article.querySelector('.article-content')?.textContent || '';
+      
+      // Only include articles with actual content (not placeholders)
+      if (content && !content.includes('currently being developed')) {
+        articles.push({
+          id,
+          title,
+          badge,
+          content: content.substring(0, 500), // First 500 chars for preview
+          fullContent: content.toLowerCase()
+        });
+      }
+    });
+    
+    // Also index navigation items
+    document.querySelectorAll('.education-section').forEach(section => {
+      const sectionTitle = section.querySelector('h2')?.textContent || '';
+      section.querySelectorAll('.topic-item a').forEach(link => {
+        const href = link.getAttribute('href');
+        const linkText = link.textContent;
+        const targetArticle = articles.find(a => `#${a.id}` === href);
+        
+        // Add navigation context to articles
+        if (targetArticle && !targetArticle.keywords) {
+          targetArticle.keywords = [];
+        }
+        if (targetArticle) {
+          targetArticle.keywords.push(linkText.toLowerCase());
+          targetArticle.keywords.push(sectionTitle.toLowerCase());
+        }
+      });
+    });
+    
+    function highlightText(text, query) {
+      const regex = new RegExp(`(${query})`, 'gi');
+      return text.replace(regex, '<mark>$1</mark>');
+    }
+    
+    function performSearch(query) {
+      if (!query || query.length < 2) {
+        searchResults.style.display = 'none';
+        return;
+      }
+      
+      const lowerQuery = query.toLowerCase();
+      const results = articles.filter(article => {
+        const titleMatch = article.title.toLowerCase().includes(lowerQuery);
+        const contentMatch = article.fullContent.includes(lowerQuery);
+        const keywordMatch = article.keywords?.some(k => k.includes(lowerQuery));
+        return titleMatch || contentMatch || keywordMatch;
+      });
+      
+      // Sort by relevance (title matches first)
+      results.sort((a, b) => {
+        const aTitle = a.title.toLowerCase().includes(lowerQuery);
+        const bTitle = b.title.toLowerCase().includes(lowerQuery);
+        if (aTitle && !bTitle) return -1;
+        if (!aTitle && bTitle) return 1;
+        return 0;
+      });
+      
+      displayResults(results, query);
+    }
+    
+    function displayResults(results, query) {
+      searchResults.style.display = 'block';
+      searchCount.textContent = `${results.length} result${results.length !== 1 ? 's' : ''}`;
+      
+      if (results.length === 0) {
+        searchResultsList.innerHTML = `
+          <div class="no-results">
+            <div class="no-results-icon">🔍</div>
+            <p>No results found for "<strong>${query}</strong>"</p>
+            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Try different keywords or browse the topics below.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      searchResultsList.innerHTML = results.map(article => {
+        // Get excerpt around the search term
+        const queryPos = article.fullContent.indexOf(query.toLowerCase());
+        let excerpt = article.content;
+        
+        if (queryPos > -1) {
+          const start = Math.max(0, queryPos - 100);
+          const end = Math.min(article.fullContent.length, queryPos + 200);
+          excerpt = '...' + article.fullContent.substring(start, end) + '...';
+        }
+        
+        return `
+          <div class="search-result-item" onclick="window.location.href='#${article.id}'">
+            <span class="badge">${article.badge}</span>
+            <h3>${highlightText(article.title, query)}</h3>
+            <p>${highlightText(excerpt, query)}</p>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    // Debounce search input
+    let searchTimeout;
+    searchInput.addEventListener('input', (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        performSearch(e.target.value.trim());
+      }, 300);
+    });
+    
+    // Clear search
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      searchResults.style.display = 'none';
+      searchInput.focus();
+    });
+    
+    // Close search results when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.education-search')) {
+        // Don't hide if clicking on a search result
+        if (!e.target.closest('.search-result-item')) {
+          // Just blur, don't hide results
+        }
+      }
+    });
+  }
+
   /* Smooth scrolling for same-page links */
   function initSmoothScroll(){
+    let scrollOrigin = null; // Track where user clicked from
+    
     document.addEventListener('click', (e) => {
       const a = e.target.closest('a[href^="#"]');
       if(!a) return;
@@ -63,13 +213,57 @@
       const target = document.querySelector(href);
       if(target){
         e.preventDefault();
+        
+        // Save scroll position before jumping
+        scrollOrigin = window.pageYOffset || document.documentElement.scrollTop;
+        
         target.scrollIntoView({behavior:'smooth', block:'start'});
         // update focus for accessibility
         target.setAttribute('tabindex','-1');
         target.focus({preventScroll:true});
         window.setTimeout(()=> target.removeAttribute('tabindex'), 1000);
+        
+        // Show back button after scrolling
+        window.setTimeout(() => showBackButton(scrollOrigin), 600);
       }
     });
+  }
+  
+  /* Back to navigation button */
+  function showBackButton(originY) {
+    // Remove existing button if any
+    let backBtn = document.getElementById('back-to-nav');
+    if(backBtn) backBtn.remove();
+    
+    // Create back button
+    backBtn = document.createElement('button');
+    backBtn.id = 'back-to-nav';
+    backBtn.className = 'back-to-nav';
+    backBtn.innerHTML = '↑ Back to Navigation';
+    backBtn.setAttribute('aria-label', 'Return to previous position');
+    
+    // Add click handler
+    backBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: originY,
+        behavior: 'smooth'
+      });
+      // Remove button after clicking
+      window.setTimeout(() => backBtn.remove(), 600);
+    });
+    
+    document.body.appendChild(backBtn);
+    
+    // Fade in
+    window.setTimeout(() => backBtn.classList.add('visible'), 50);
+    
+    // Auto-hide after 10 seconds
+    window.setTimeout(() => {
+      if(backBtn && backBtn.parentNode) {
+        backBtn.classList.remove('visible');
+        window.setTimeout(() => backBtn.remove(), 300);
+      }
+    }, 10000);
   }
 
   /* Simple AJAX form handler
@@ -141,6 +335,7 @@
     initAjaxForms();
     markActiveNav();
     initPlantPage();
+    initEducationSearch();
     // add more init calls here (modals, lightbox, analytics setup, etc.)
   }
 
