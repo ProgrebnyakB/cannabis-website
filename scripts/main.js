@@ -410,15 +410,61 @@
         const condBox = document.querySelector('.current-conditions');
         const condModal = document.getElementById('cond-modal');
         if(condBox && condModal){
+          // make the on-page box compact visually
+          condBox.classList.add('compact');
+
           condBox.addEventListener('click', (e) => {
             // if user clicked the inline edit button or inside the cond-form, don't open modal
             if(e.target.closest('#edit-conditions') || e.target.closest('#cond-form') || e.target.tagName === 'BUTTON') return;
-            // clone the visible conditions but remove interactive bits
-            const clone = condBox.cloneNode(true);
-            const btns = clone.querySelectorAll('.cond-actions'); btns.forEach(n=>n.remove());
-            const innerForm = clone.querySelector('#cond-form'); if(innerForm) innerForm.remove();
             const body = condModal.querySelector('.modal-body'); body.innerHTML = '';
-            body.appendChild(clone);
+            // Try to read saved conditions first, then fallback to DOM values
+            const cond = loadConditions() || (function(){
+              const container = document.querySelector('.current-conditions');
+              if(!container) return null;
+              const items = Array.from(container.querySelectorAll('ul > li'));
+              const keys = ['Day','Light cycle','Temperature','Relative humidity','VPD','Lights'];
+              const obj = {};
+              items.forEach((li, idx) => { const k = keys[idx] || ('field'+idx); const v = li.querySelector('.muted') ? li.querySelector('.muted').textContent.trim() : li.textContent.trim(); obj[k]=v; });
+              return obj;
+            })();
+
+            // render a compact readable layout into modal
+            if(cond){
+              const wrap = document.createElement('div');
+              wrap.className = 'cond-modal-body';
+              wrap.innerHTML = `<p style="margin-top:0; color: #dfffe8;">Current conditions for <strong>Bubble Gummy Auto</strong></p>`;
+              const list = document.createElement('dl');
+              list.style.display = 'grid'; list.style.gridTemplateColumns = '1fr 1fr'; list.style.gap = '.5rem'; list.style.marginTop = '.5rem';
+              // prefer saved object keys
+              if(cond.day !== undefined || cond.Day){
+                const day = cond.day || cond.Day || '';
+                list.innerHTML += `<div><dt style="font-weight:700;color:#eaf3ea">Day</dt><dd style="margin:0;color:#cfe9d8">${day}</dd></div>`;
+              }
+              const light = cond.light || cond['Light cycle'] || '';
+              list.innerHTML += `<div><dt style="font-weight:700;color:#eaf3ea">Light cycle</dt><dd style="margin:0;color:#cfe9d8">${light}</dd></div>`;
+              const temp = cond.temp !== undefined ? (cond.temp + '°F') : (cond.Temperature || '');
+              list.innerHTML += `<div><dt style="font-weight:700;color:#eaf3ea">Temperature</dt><dd style="margin:0;color:#cfe9d8">${temp}</dd></div>`;
+              const rh = cond.rh !== undefined ? (cond.rh + '%') : (cond['Relative humidity'] || '');
+              list.innerHTML += `<div><dt style="font-weight:700;color:#eaf3ea">RH</dt><dd style="margin:0;color:#cfe9d8">${rh}</dd></div>`;
+              const vpd = cond.vpd !== undefined ? cond.vpd : (cond.VPD || '');
+              list.innerHTML += `<div><dt style="font-weight:700;color:#eaf3ea">VPD</dt><dd style="margin:0;color:#cfe9d8">${vpd}</dd></div>`;
+              const lights = cond.lights !== undefined ? (cond.lights + '%') : (cond.Lights || '');
+              list.innerHTML += `<div><dt style="font-weight:700;color:#eaf3ea">Lights</dt><dd style="margin:0;color:#cfe9d8">${lights}</dd></div>`;
+              wrap.appendChild(list);
+              // add a small action area linking to the inline editor
+              const foot = document.createElement('div'); foot.style.marginTop = '.75rem'; foot.innerHTML = `<button class="btn btn-primary" id="cond-edit-from-modal">Edit conditions</button>`;
+              wrap.appendChild(foot);
+              body.appendChild(wrap);
+              // wire the modal edit button to open the inline editor
+              body.querySelector('#cond-edit-from-modal').addEventListener('click', ()=>{
+                // close modal and open inline editor
+                condModal.classList.remove('open'); condModal.setAttribute('aria-hidden','true');
+                const editBtn = document.getElementById('edit-conditions'); if(editBtn) editBtn.click();
+              });
+            } else {
+              body.textContent = 'No conditions saved yet.';
+            }
+
             condModal.classList.add('open'); condModal.setAttribute('aria-hidden','false');
             const close = condModal.querySelector('.modal-close'); if(close) close.focus();
           });

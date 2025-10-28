@@ -355,15 +355,21 @@ input:focus, textarea:focus{outline:3px solid color-mix(in srgb, var(--brand) 25
 .current-conditions ul{ margin:0; padding:0; list-style:none }
 .current-conditions ul li{ background:transparent; padding:0.2rem 0 }
 
+/* Make the green box compact by default: show only first two stats on the card itself */
+.current-conditions ul li{ display:none }
+.current-conditions ul li:nth-child(1),
+.current-conditions ul li:nth-child(2){ display:block }
+.current-conditions .cond-actions{ display:none }
+
 /* centered modal for conditions */
 .cond-modal{ display:none; position:fixed; inset:0; align-items:center; justify-content:center; z-index:1200; }
 .cond-modal.open{ display:flex; }
-.cond-modal .modal-panel{ width:min(760px,calc(100% - 48px)); max-height:86vh; overflow:auto; border-radius:12px; padding:1rem 1.25rem; background:linear-gradient(180deg,#ffffff,#f7fff7); box-shadow:0 20px 60px rgba(15,25,20,0.45); position:relative }
-.cond-modal .modal-close{ position:absolute; right:12px; top:10px; background:transparent; border:0; font-size:22px; cursor:pointer }
-.cond-modal::before{ content:''; position:fixed; inset:0; background:rgba(8,10,8,0.42); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index:-1; }
-.cond-modal .current-conditions{ background:transparent; color:#06210a; box-shadow:none; padding:0; border-radius:6px }
-.cond-modal .current-conditions h4, .cond-modal .current-conditions strong{ color:var(--brand-600) }
-.cond-modal .current-conditions .muted{ color:var(--text) }
+.cond-modal .modal-panel{ width:min(760px,calc(100% - 48px)); max-height:86vh; overflow:auto; border-radius:12px; padding:1rem 1.25rem; background:#0b1410; color:var(--muted); box-shadow:0 20px 60px rgba(0,0,0,0.6); position:relative }
+.cond-modal .modal-close{ position:absolute; right:12px; top:10px; background:transparent; border:0; font-size:22px; cursor:pointer; color: #dfffe8 }
+.cond-modal::before{ content:''; position:fixed; inset:0; background:rgba(2,4,3,0.6); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index:-1; }
+.cond-modal .current-conditions{ background:transparent; color:#eaf3ea; box-shadow:none; padding:0; border-radius:6px }
+.cond-modal .current-conditions h4, .cond-modal .current-conditions strong{ color:#dfffe8 }
+.cond-modal .current-conditions .muted{ color:#cfe9d8 }
 
 @media (max-width:700px){
   .cond-modal .modal-panel{ width:calc(100% - 24px); padding:0.75rem }
