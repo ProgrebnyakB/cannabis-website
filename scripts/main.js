@@ -154,6 +154,7 @@
   /* Plant page helper: compute days since germination and basic timeline behaviour */
   function initPlantPage(){
     try{
+      // compute days since and animate count up
       const dateEls = Array.from(document.querySelectorAll('[data-germinated]'));
       dateEls.forEach(el => {
         const d = el.getAttribute('data-germinated');
@@ -163,20 +164,82 @@
         const now = new Date();
         const days = Math.floor((now - then) / (1000*60*60*24));
         const span = el.querySelector('.days-since');
-        if(span) span.textContent = days;
+        if(span){
+          // animate from 0 to days
+          let start = 0;
+          const duration = 900;
+          const startTime = performance.now();
+          const step = (t) => {
+            const progress = Math.min(1, (t - startTime) / duration);
+            const val = Math.floor(progress * days);
+            span.textContent = val;
+            if(progress < 1) requestAnimationFrame(step);
+            else span.textContent = days;
+          };
+          requestAnimationFrame(step);
+        }
       });
 
-      // timeline expand/collapse (click to toggle details)
-      const entries = document.querySelectorAll('.timeline-entry');
-      entries.forEach(entry => {
-        entry.style.cursor = 'pointer';
-        entry.addEventListener('click', () => {
-          entry.classList.toggle('open');
-          // simple visual: toggle box-shadow intensity
-          if(entry.classList.contains('open')) entry.style.boxShadow = '0 18px 30px rgba(10,10,10,0.06)';
-          else entry.style.boxShadow = '';
+      // progress-bar animation (find any progress-bar and animate to its inline width if set)
+      const bars = Array.from(document.querySelectorAll('.progress-bar'));
+      bars.forEach(bar => {
+        // read the intended width from inline style if present (e.g., style="width:65%")
+        const inline = bar.getAttribute('style') || '';
+        const match = inline.match(/width:\s*(\d+)%/i);
+        const target = match ? match[1] + '%' : '100%';
+        // start at 0 then set to target after a tick for transition
+        bar.style.width = '0%';
+        window.setTimeout(()=> bar.style.width = target, 50);
+      });
+
+      // modal / popout behavior: open modal with entry content
+      const modal = document.getElementById('plant-modal');
+      const modalPanel = modal && modal.querySelector('.modal-panel');
+      const modalBody = modal && modal.querySelector('.modal-body');
+      const modalTitle = modal && modal.querySelector('.modal-title');
+      const modalPhoto = modal && modal.querySelector('.modal-photo');
+
+      function openModal(title, bodyHtml, photoSrc){
+        if(!modal) return;
+        if(modalPhoto && photoSrc) modalPhoto.src = photoSrc;
+        if(modalTitle) modalTitle.textContent = title || 'Details';
+        if(modalBody) modalBody.innerHTML = bodyHtml || '';
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden','false');
+        // trap focus simplistically by focusing close button
+        const btn = modal.querySelector('.modal-close'); if(btn) btn.focus();
+      }
+
+      function closeModal(){
+        if(!modal) return;
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden','true');
+      }
+
+      // attach listeners to timeline details buttons
+      const detailBtns = Array.from(document.querySelectorAll('.timeline-details'));
+      detailBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const entry = btn.closest('.timeline-entry');
+          if(!entry) return;
+          const time = entry.querySelector('time') ? entry.querySelector('time').textContent.trim() : '';
+          const text = entry.querySelector('p') ? entry.querySelector('p').outerHTML : '';
+          // use large photo for modal if available, otherwise fallback to main plant photo
+          const photoSrc = document.querySelector('.modal-photo') ? document.querySelector('.modal-photo').src : null;
+          openModal(time, text, photoSrc);
         });
       });
+
+      // close modal via close button or backdrop
+      if(modal){
+        const closeBtn = modal.querySelector('.modal-close');
+        if(closeBtn) closeBtn.addEventListener('click', closeModal);
+        const backdrop = modal.querySelector('[data-dismiss]');
+        if(backdrop) backdrop.addEventListener('click', closeModal);
+        document.addEventListener('keydown', (ev) => { if(ev.key === 'Escape') closeModal(); });
+      }
+
     }catch(e){
       // fail silently if not on plant page
     }

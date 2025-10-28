@@ -76,22 +76,27 @@
         <li class="timeline-entry">
           <time>2025-08-01 — Germinated</time>
           <p>Seed split and taproot visible. Placed into damp paper towel and moved to 72°F cabinet.</p>
+          <button class="btn btn-ghost timeline-details">Details</button>
         </li>
         <li class="timeline-entry">
           <time>2025-08-07 — Seedling</time>
           <p>First true leaves appeared. Transplanted to 2" starter plug, gentle misting twice daily.</p>
+          <button class="btn btn-ghost timeline-details">Details</button>
         </li>
         <li class="timeline-entry">
           <time>2025-09-03 — Vegetative</time>
           <p>Moved to 3-gallon pot; 18/6 light schedule. Feeding with mild veg nutrient at 200ppm.</p>
+          <button class="btn btn-ghost timeline-details">Details</button>
         </li>
         <li class="timeline-entry">
           <time>2025-10-01 — Pre-flower</time>
           <p>Noticed pistils and stretch beginning; switched to 12/12 to induce flowering.</p>
+          <button class="btn btn-ghost timeline-details">Details</button>
         </li>
         <li class="timeline-entry">
           <time>2025-10-27 — Flowering (Week 5)</time>
           <p>Trichomes milky on upper buds; lowered humidity to 45% and increased potassium-focused feed.</p>
+          <button class="btn btn-ghost timeline-details">Details</button>
         </li>
       </ol>
     </section>
@@ -105,6 +110,17 @@
     </section>
 
   </main>
+
+  <!-- Modal / Popout for timeline details -->
+  <div id="plant-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-panel card">
+      <button class="modal-close" aria-label="Close">×</button>
+      <img src="assets/bubble-gummy.jpg" alt="Bubble Gummy Auto" class="modal-photo" />
+      <h3 class="modal-title">Event details</h3>
+      <div class="modal-body"></div>
+    </div>
+    <div class="modal-backdrop" data-dismiss></div>
+  </div>
 
   <footer class="site-footer container">
     <div class="grid grid-2">
