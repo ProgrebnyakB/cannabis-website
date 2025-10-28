@@ -6,8 +6,8 @@
   <title>Borough Botanicals — Natural Wellness, Local Care</title>
   <meta name="description" content="Borough Botanicals — local, lab-tested hemp products crafted for wellness. Discover our story, shop, or get in touch." />
   <link rel="stylesheet" href="styles/main.css" />
-  <!-- inline SVG favicon (small, editable) -->
-  <link rel="icon" href='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%25%22 height=%22100%25%22 rx=%2218%22 fill=%22%232f9e44%22 /><text x=%2250%25%22 y=%2255%25%22 font-size=%2238%22 font-family=%22Arial%22 fill=%22white%22 text-anchor=%22middle%22 alignment-baseline=%22middle%22>BB</text></svg>' />
+  <!-- favicon: use the generated PNG so tabs show the logo -->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo-32.png" />
   <!-- optional favicons (place generated PNGs in assets/) -->
   <link rel="icon" type="image/png" sizes="32x32" href="assets/logo-32.png" />
   <link rel="icon" type="image/png" sizes="192x192" href="assets/logo-192.png" />
@@ -17,13 +17,13 @@
   <!-- Open Graph / Twitter -->
   <meta property="og:title" content="Borough Botanicals — Natural Wellness, Local Care" />
   <meta property="og:description" content="Small-batch hemp products made with care. Transparency, lab-tested, sustainably sourced." />
-  <meta property="og:image" content="https://progrebnyakb.github.io/cannabis-website/assets/og-image.svg" />
+  <meta property="og:image" content="https://progrebnyakb.github.io/cannabis-website/assets/og-image.png" />
   <meta property="og:url" content="https://progrebnyakb.github.io/cannabis-website/" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Borough Botanicals" />
   <meta name="twitter:description" content="Small-batch hemp products made with care. Transparency, lab-tested, sustainably sourced." />
-  <meta name="twitter:image" content="https://progrebnyakb.github.io/cannabis-website/assets/og-image.svg" />
+  <meta name="twitter:image" content="https://progrebnyakb.github.io/cannabis-website/assets/og-image.png" />
 </head>
 <body>
   <header class="site-header">
@@ -56,20 +56,10 @@
                 <a class="btn btn-primary" href="about.html">Our Story</a>
               </div>
             </div>
-            <div class="hero-visual card" aria-hidden="true">
-              <!-- Decorative visual: subtle gradient + stylized leaf SVG -->
+            <div class="hero-visual card">
+              <!-- Replace decorative SVG with the uploaded brand logo -->
               <div class="visual-plate">
-                <svg width="220" height="220" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <defs>
-                    <linearGradient id="g1" x1="0" x2="1">
-                      <stop offset="0%" stop-color="#dff6e3" />
-                      <stop offset="100%" stop-color="#bbe7c1" />
-                    </linearGradient>
-                  </defs>
-                  <rect width="100" height="100" rx="12" fill="url(#g1)" />
-                  <path d="M20 65c12-18 28-28 42-30" stroke="#2f9e44" stroke-width="3" fill="none" stroke-linecap="round"/>
-                  <path d="M50 55c6-12 18-18 30-20" stroke="#23823a" stroke-width="2" fill="none" stroke-linecap="round"/>
-                </svg>
+                <img src="assets/logo.png" srcset="assets/logo@2x.png 2x" alt="Borough Botanicals logo" class="hero-logo" width="220" height="220" />
               </div>
             </div>
           </div>
