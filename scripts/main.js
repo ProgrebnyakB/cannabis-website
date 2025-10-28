@@ -319,6 +319,117 @@
         document.addEventListener('keydown', (ev) => { if(ev.key === 'Escape') closeModal(); });
       }
 
+      // Conditions editor: LocalStorage-backed
+      function loadConditions(){
+        try{
+          const raw = localStorage.getItem('plant_conditions');
+          if(!raw) return null;
+          return JSON.parse(raw);
+        }catch(e){return null}
+      }
+
+      function saveConditions(obj){
+        try{ localStorage.setItem('plant_conditions', JSON.stringify(obj)); }catch(e){}
+      }
+
+      function renderConditions(){
+        const cond = loadConditions();
+        if(!cond) return;
+        // update stat grid visible values
+        const statGrid = document.querySelector('.current-conditions');
+        if(!statGrid) return;
+        // naive updates: find elements by order — replace entire block for simplicity
+        const elems = statGrid.querySelectorAll('ul > li');
+        if(elems && elems.length >= 6){
+          elems[0].querySelector('.muted').textContent = String(cond.day || '—');
+          elems[1].querySelector('.muted').textContent = String(cond.light || '—');
+          elems[2].querySelector('.muted').textContent = String(cond.temp ? cond.temp + '°F' : '—');
+          elems[3].querySelector('.muted').textContent = String(cond.rh ? cond.rh + '%' : '—');
+          elems[4].querySelector('.muted').textContent = String(cond.vpd || '—');
+          elems[5].querySelector('.muted').textContent = String(cond.lights ? cond.lights + '% output' : '—');
+        }
+        // if day provided, update animated counter data-germinated to compute days if user provided germination date logic isn't used
+        const dayInput = document.querySelector('[data-germinated]');
+        if(dayInput && cond && cond.germinatedDate){
+          dayInput.setAttribute('data-germinated', cond.germinatedDate);
+        }
+      }
+
+      function initConditionsEditor(){
+        const editBtn = document.getElementById('edit-conditions');
+        const form = document.getElementById('cond-form');
+        const cancel = document.getElementById('cond-cancel');
+        if(!editBtn || !form) return;
+        // prefill form from stored conditions or DOM
+        function prefill(){
+          const cond = loadConditions() || {};
+          form.elements['day'].value = cond.day || '';
+          form.elements['light'].value = cond.light || '';
+          form.elements['temp'].value = cond.temp || '';
+          form.elements['rh'].value = cond.rh || '';
+          form.elements['vpd'].value = cond.vpd || '';
+          form.elements['lights'].value = cond.lights || '';
+        }
+        editBtn.addEventListener('click', ()=>{ prefill(); form.style.display = ''; editBtn.style.display = 'none'; form.elements['day'].focus(); });
+        cancel.addEventListener('click', ()=>{ form.style.display = 'none'; editBtn.style.display = ''; });
+        form.addEventListener('submit', (ev)=>{
+          ev.preventDefault();
+          const data = {
+            day: Number(form.elements['day'].value) || null,
+            light: form.elements['light'].value || null,
+            temp: form.elements['temp'].value ? Number(form.elements['temp'].value) : null,
+            rh: form.elements['rh'].value ? Number(form.elements['rh'].value) : null,
+            vpd: form.elements['vpd'].value ? Number(form.elements['vpd'].value) : null,
+            lights: form.elements['lights'].value ? Number(form.elements['lights'].value) : null,
+            // store approximate germinatedDate so the counter can use it if provided elsewhere
+            germinatedDate: form.dataset && form.dataset.germinatedDate || null
+          };
+          saveConditions(data);
+          renderConditions();
+          // close editor
+          form.style.display = 'none';
+          editBtn.style.display = '';
+          // update days counter immediately if day was set (we'll just update the visible day number)
+          const daySpan = document.querySelector('.current-conditions .days-since');
+          if(daySpan && data.day){ daySpan.textContent = String(data.day); }
+        });
+      }
+
+      // Notes: LocalStorage-backed notes list
+      function loadNotes(){ try{ const raw = localStorage.getItem('plant_notes'); return raw? JSON.parse(raw): []; }catch(e){return []} }
+      function saveNotes(arr){ try{ localStorage.setItem('plant_notes', JSON.stringify(arr)); }catch(e){} }
+      function renderNotes(){ const notes = loadNotes(); const container = document.getElementById('notes-list'); if(!container) return; const list = notes.concat([]); // local copy
+        container.innerHTML = '<ul>' + list.map(n=>`<li>${n}</li>`).join('') + '</ul>'; }
+      function initNotesEditor(){ const form = document.getElementById('note-form'); if(!form) return; form.addEventListener('submit', (ev)=>{ ev.preventDefault(); const text = form.elements['note'].value.trim(); if(!text) return; const stamped = (new Date()).toISOString().slice(0,10) + ' — ' + text; const notes = loadNotes(); notes.unshift(stamped); saveNotes(notes); renderNotes(); form.reset(); }); renderNotes(); }
+
+      // initialize editors and render persisted data
+      initConditionsEditor(); renderConditions(); initNotesEditor();
+
+      // Clicking the current-conditions card opens a centered modal that blurs the background
+      try{
+        const condBox = document.querySelector('.current-conditions');
+        const condModal = document.getElementById('cond-modal');
+        if(condBox && condModal){
+          condBox.addEventListener('click', (e) => {
+            // if user clicked the inline edit button or inside the cond-form, don't open modal
+            if(e.target.closest('#edit-conditions') || e.target.closest('#cond-form') || e.target.tagName === 'BUTTON') return;
+            // clone the visible conditions but remove interactive bits
+            const clone = condBox.cloneNode(true);
+            const btns = clone.querySelectorAll('.cond-actions'); btns.forEach(n=>n.remove());
+            const innerForm = clone.querySelector('#cond-form'); if(innerForm) innerForm.remove();
+            const body = condModal.querySelector('.modal-body'); body.innerHTML = '';
+            body.appendChild(clone);
+            condModal.classList.add('open'); condModal.setAttribute('aria-hidden','false');
+            const close = condModal.querySelector('.modal-close'); if(close) close.focus();
+          });
+
+          // close handlers for conditions modal
+          const condClose = condModal.querySelector('.modal-close'); if(condClose) condClose.addEventListener('click', ()=>{ condModal.classList.remove('open'); condModal.setAttribute('aria-hidden','true'); });
+          const condBackdrop = condModal.querySelector('[data-dismiss]'); if(condBackdrop) condBackdrop.addEventListener('click', ()=>{ condModal.classList.remove('open'); condModal.setAttribute('aria-hidden','true'); });
+          document.addEventListener('keydown', (ev)=>{ if(ev.key === 'Escape') condModal.classList.remove('open'); });
+        }
+      }catch(e){ /* ignore if modal not present */ }
+
     }catch(e){
       // fail silently if not on plant page
     }

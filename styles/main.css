@@ -338,3 +338,34 @@ input:focus, textarea:focus{outline:3px solid color-mix(in srgb, var(--brand) 25
 @media (max-width:900px){
   .plant-hero .stat-grid{grid-template-columns:1fr}
 }
+
+/* ========= Current Conditions green box + centered modal ========= */
+.current-conditions{
+  background: linear-gradient(180deg, var(--brand), var(--brand-600));
+  color: #fff;
+  padding: 1rem;
+  border-radius: 14px;
+  box-shadow: 0 10px 26px rgba(31,125,51,0.18);
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
+}
+.current-conditions:hover{ transform: translateY(-4px); box-shadow: 0 18px 38px rgba(31,125,51,0.22); }
+.current-conditions h4, .current-conditions strong{ color: #e9ffe9; }
+.current-conditions .muted{ color: rgba(255,255,255,0.95); }
+.current-conditions ul{ margin:0; padding:0; list-style:none }
+.current-conditions ul li{ background:transparent; padding:0.2rem 0 }
+
+/* centered modal for conditions */
+.cond-modal{ display:none; position:fixed; inset:0; align-items:center; justify-content:center; z-index:1200; }
+.cond-modal.open{ display:flex; }
+.cond-modal .modal-panel{ width:min(760px,calc(100% - 48px)); max-height:86vh; overflow:auto; border-radius:12px; padding:1rem 1.25rem; background:linear-gradient(180deg,#ffffff,#f7fff7); box-shadow:0 20px 60px rgba(15,25,20,0.45); position:relative }
+.cond-modal .modal-close{ position:absolute; right:12px; top:10px; background:transparent; border:0; font-size:22px; cursor:pointer }
+.cond-modal::before{ content:''; position:fixed; inset:0; background:rgba(8,10,8,0.42); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index:-1; }
+.cond-modal .current-conditions{ background:transparent; color:#06210a; box-shadow:none; padding:0; border-radius:6px }
+.cond-modal .current-conditions h4, .cond-modal .current-conditions strong{ color:var(--brand-600) }
+.cond-modal .current-conditions .muted{ color:var(--text) }
+
+@media (max-width:700px){
+  .cond-modal .modal-panel{ width:calc(100% - 24px); padding:0.75rem }
+  .current-conditions{ border-radius:12px }
+}

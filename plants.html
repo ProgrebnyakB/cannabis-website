@@ -79,6 +79,24 @@
               <li><strong>VPD</strong><div class="muted">1.8 kPa</div></li>
               <li><strong>Lights</strong><div class="muted">80% output</div></li>
             </ul>
+            <div class="cond-actions" style="margin-top:.75rem">
+              <button id="edit-conditions" class="btn btn-ghost">Edit conditions</button>
+            </div>
+
+            <form id="cond-form" class="cond-form" style="display:none; margin-top:.75rem">
+              <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:.5rem;">
+                <label>Day <input name="day" type="number" min="0" /></label>
+                <label>Light cycle <input name="light" type="text" /></label>
+                <label>Temperature (°F) <input name="temp" type="number" step="0.1" /></label>
+                <label>Relative humidity (%) <input name="rh" type="number" step="0.1" /></label>
+                <label>VPD <input name="vpd" type="number" step="0.1" /></label>
+                <label>Lights (%) <input name="lights" type="number" min="0" max="100" /></label>
+              </div>
+              <div style="margin-top:.5rem; display:flex; gap:.5rem;">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="button" id="cond-cancel" class="btn btn-ghost">Cancel</button>
+              </div>
+            </form>
           </div>
 
           <p style="margin-top:.75rem">Quick care notes: Indoor, 18/6 light for veg, 12/12 to flower. Keep runoff pH around 6.2–6.6. Monitor humidity during flower.</p>
@@ -128,10 +146,20 @@
 
     <section class="notes card">
       <h2>Recent Notes</h2>
-      <ul>
-        <li>2025-10-25 — Flushed lightly due to slight salt build-up.</li>
-        <li>2025-10-20 — Began foliar spray with kelp extract (low dose).</li>
-      </ul>
+      <div id="notes-list">
+        <ul>
+          <li>2025-10-25 — Flushed lightly due to slight salt build-up.</li>
+          <li>2025-10-20 — Began foliar spray with kelp extract (low dose).</li>
+        </ul>
+      </div>
+
+      <form id="note-form" class="notes-form" style="margin-top:.75rem">
+        <label style="display:block">Add a quick note</label>
+        <div style="display:flex; gap:.5rem; max-width:560px">
+          <input name="note" type="text" placeholder="e.g. watered 500ml, added kelp" style="flex:1; padding:.5rem; border-radius:6px; border:1px solid rgba(0,0,0,0.06)" required />
+          <button class="btn btn-primary" type="submit">Add</button>
+        </div>
+      </form>
     </section>
 
   </main>
@@ -145,6 +173,18 @@
         <h3 class="modal-title">Event details</h3>
         <div class="modal-body"></div>
         <div class="modal-gallery" aria-hidden="false"></div>
+      </div>
+    </div>
+    <div class="modal-backdrop" data-dismiss></div>
+  </div>
+
+  <!-- Modal for Current Conditions (centered, blurred backdrop) -->
+  <div id="cond-modal" class="cond-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-panel card">
+      <button class="modal-close" aria-label="Close">×</button>
+      <div class="modal-content">
+        <h3 class="modal-title">Current conditions</h3>
+        <div class="modal-body" aria-live="polite"></div>
       </div>
     </div>
     <div class="modal-backdrop" data-dismiss></div>
