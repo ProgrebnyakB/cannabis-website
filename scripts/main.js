@@ -217,9 +217,12 @@
             gallery.style.display = '';
             trimmed.forEach((src, idx) => {
               const img = document.createElement('img');
-              img.src = src;
+              // lazy-load thumbnails when modal opens
+              img.dataset.src = src;
+              img.loading = 'lazy';
               img.alt = `${title} photo ${idx+1}`;
               img.tabIndex = 0;
+              img.dataset.index = idx;
               img.addEventListener('click', () => {
                 if(modalPhoto) modalPhoto.src = src;
                 // set selected class
@@ -227,6 +230,8 @@
                 img.classList.add('selected');
               });
               img.addEventListener('keydown', (ev) => { if(ev.key === 'Enter' || ev.key === ' ') img.click(); });
+              // set src synchronously so images load when the modal opens; keep as lazy attribute too
+              img.src = img.dataset.src;
               gallery.appendChild(img);
             });
             // set first as selected
@@ -235,14 +240,44 @@
           }
         }
 
+        // add swipe support for modalPhoto (mobile)
+        let touchStartX = 0;
+        let touchEndX = 0;
+        function onTouchStart(e){ touchStartX = e.changedTouches[0].clientX; }
+        function onTouchEnd(e){
+          touchEndX = e.changedTouches[0].clientX;
+          const dx = touchEndX - touchStartX;
+          if(Math.abs(dx) > 40){
+            const imgs = Array.from(gallery.querySelectorAll('img'));
+            const current = imgs.findIndex(i => i.classList.contains('selected'));
+            if(current === -1) return;
+            if(dx < 0 && current < imgs.length - 1){ imgs[current+1].click(); }
+            else if(dx > 0 && current > 0){ imgs[current-1].click(); }
+          }
+        }
+        if(modalPhoto){
+          modalPhoto.addEventListener('touchstart', onTouchStart, {passive:true});
+          modalPhoto.addEventListener('touchend', onTouchEnd, {passive:true});
+        }
+
         modal.classList.add('open');
         modal.setAttribute('aria-hidden','false');
         // trap focus simplistically by focusing close button
         const btn = modal.querySelector('.modal-close'); if(btn) btn.focus();
+
+        // remember handlers so we can remove them on close
+        modal._onTouchStart = onTouchStart;
+        modal._onTouchEnd = onTouchEnd;
       }
 
       function closeModal(){
         if(!modal) return;
+        // remove swipe listeners if present
+        if(modalPhoto && modal._onTouchStart){
+          modalPhoto.removeEventListener('touchstart', modal._onTouchStart);
+          modalPhoto.removeEventListener('touchend', modal._onTouchEnd);
+          delete modal._onTouchStart; delete modal._onTouchEnd;
+        }
         modal.classList.remove('open');
         modal.setAttribute('aria-hidden','true');
       }
