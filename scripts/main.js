@@ -199,11 +199,42 @@
       const modalTitle = modal && modal.querySelector('.modal-title');
       const modalPhoto = modal && modal.querySelector('.modal-photo');
 
-      function openModal(title, bodyHtml, photoSrc){
+      function openModal(title, bodyHtml, photos){
         if(!modal) return;
-        if(modalPhoto && photoSrc) modalPhoto.src = photoSrc;
+        const gallery = modal.querySelector('.modal-gallery');
+        // set title & body
         if(modalTitle) modalTitle.textContent = title || 'Details';
         if(modalBody) modalBody.innerHTML = bodyHtml || '';
+
+        // populate gallery
+        if(gallery){
+          gallery.innerHTML = '';
+          const list = Array.isArray(photos) ? photos : (photos ? String(photos).split(',') : []);
+          const trimmed = list.map(s => s.trim()).filter(Boolean);
+          if(trimmed.length === 0){
+            gallery.style.display = 'none';
+          } else {
+            gallery.style.display = '';
+            trimmed.forEach((src, idx) => {
+              const img = document.createElement('img');
+              img.src = src;
+              img.alt = `${title} photo ${idx+1}`;
+              img.tabIndex = 0;
+              img.addEventListener('click', () => {
+                if(modalPhoto) modalPhoto.src = src;
+                // set selected class
+                gallery.querySelectorAll('img').forEach(i => i.classList.remove('selected'));
+                img.classList.add('selected');
+              });
+              img.addEventListener('keydown', (ev) => { if(ev.key === 'Enter' || ev.key === ' ') img.click(); });
+              gallery.appendChild(img);
+            });
+            // set first as selected
+            const first = gallery.querySelector('img');
+            if(first){ first.classList.add('selected'); if(modalPhoto) modalPhoto.src = first.src; }
+          }
+        }
+
         modal.classList.add('open');
         modal.setAttribute('aria-hidden','false');
         // trap focus simplistically by focusing close button
@@ -225,9 +256,22 @@
           if(!entry) return;
           const time = entry.querySelector('time') ? entry.querySelector('time').textContent.trim() : '';
           const text = entry.querySelector('p') ? entry.querySelector('p').outerHTML : '';
-          // use large photo for modal if available, otherwise fallback to main plant photo
-          const photoSrc = document.querySelector('.modal-photo') ? document.querySelector('.modal-photo').src : null;
-          openModal(time, text, photoSrc);
+          const photos = entry.getAttribute('data-photos') || '';
+          openModal(time, text, photos);
+        });
+      });
+
+      // clicking the date/time itself opens the same modal and shows photos
+      const timeEls = Array.from(document.querySelectorAll('.timeline-entry time'));
+      timeEls.forEach(t => {
+        t.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const entry = t.closest('.timeline-entry');
+          if(!entry) return;
+          const time = t.textContent.trim();
+          const text = entry.querySelector('p') ? entry.querySelector('p').outerHTML : '';
+          const photos = entry.getAttribute('data-photos') || '';
+          openModal(time, text, photos);
         });
       });
 
