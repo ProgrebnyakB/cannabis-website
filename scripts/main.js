@@ -428,45 +428,8 @@
               return obj;
             })();
 
-            // render a compact readable layout into modal
-            if(cond){
-              const wrap = document.createElement('div');
-              wrap.className = 'cond-modal-body';
-              wrap.innerHTML = `<p style="margin-top:0; color: #dfffe8;">Current conditions for <strong>Bubble Gummy Auto</strong></p>`;
-              const list = document.createElement('dl');
-              list.style.display = 'grid'; list.style.gridTemplateColumns = '1fr 1fr'; list.style.gap = '.5rem'; list.style.marginTop = '.5rem';
-              // prefer saved object keys
-              if(cond.day !== undefined || cond.Day){
-                const day = cond.day || cond.Day || '';
-                list.innerHTML += `<div><dt style="font-weight:700;color:#eaf3ea">Day</dt><dd style="margin:0;color:#cfe9d8">${day}</dd></div>`;
-              }
-              const light = cond.light || cond['Light cycle'] || '';
-              list.innerHTML += `<div><dt style="font-weight:700;color:#eaf3ea">Light cycle</dt><dd style="margin:0;color:#cfe9d8">${light}</dd></div>`;
-              const temp = cond.temp !== undefined ? (cond.temp + '°F') : (cond.Temperature || '');
-              list.innerHTML += `<div><dt style="font-weight:700;color:#eaf3ea">Temperature</dt><dd style="margin:0;color:#cfe9d8">${temp}</dd></div>`;
-              const rh = cond.rh !== undefined ? (cond.rh + '%') : (cond['Relative humidity'] || '');
-              list.innerHTML += `<div><dt style="font-weight:700;color:#eaf3ea">RH</dt><dd style="margin:0;color:#cfe9d8">${rh}</dd></div>`;
-              const vpd = cond.vpd !== undefined ? cond.vpd : (cond.VPD || '');
-              list.innerHTML += `<div><dt style="font-weight:700;color:#eaf3ea">VPD</dt><dd style="margin:0;color:#cfe9d8">${vpd}</dd></div>`;
-              const lights = cond.lights !== undefined ? (cond.lights + '%') : (cond.Lights || '');
-              list.innerHTML += `<div><dt style="font-weight:700;color:#eaf3ea">Lights</dt><dd style="margin:0;color:#cfe9d8">${lights}</dd></div>`;
-              wrap.appendChild(list);
-              // add a small action area linking to the inline editor
-              const foot = document.createElement('div'); foot.style.marginTop = '.75rem'; foot.innerHTML = `<button class="btn btn-primary" id="cond-edit-from-modal">Edit conditions</button>`;
-              wrap.appendChild(foot);
-              body.appendChild(wrap);
-              // wire the modal edit button to open the inline editor
-              body.querySelector('#cond-edit-from-modal').addEventListener('click', ()=>{
-                // close modal and open inline editor
-                condModal.classList.remove('open'); condModal.setAttribute('aria-hidden','true');
-                const editBtn = document.getElementById('edit-conditions'); if(editBtn) editBtn.click();
-              });
-            } else {
-              body.textContent = 'No conditions saved yet.';
-            }
-
-            condModal.classList.add('open'); condModal.setAttribute('aria-hidden','false');
-            const close = condModal.querySelector('.modal-close'); if(close) close.focus();
+            // render modal through helper (keeps consistent look for per-entry conds)
+            renderConditionsModal(cond, 'Current conditions');
           });
 
           // close handlers for conditions modal
@@ -475,6 +438,56 @@
           document.addEventListener('keydown', (ev)=>{ if(ev.key === 'Escape') condModal.classList.remove('open'); });
         }
       }catch(e){ /* ignore if modal not present */ }
+
+      // helper to render conditions into the cond-modal from an object
+      function renderConditionsModal(condObj, title){
+        const condModal = document.getElementById('cond-modal');
+        if(!condModal) return;
+        const body = condModal.querySelector('.modal-body'); body.innerHTML = '';
+        if(!condObj){ body.textContent = 'No conditions available.'; condModal.classList.add('open'); condModal.setAttribute('aria-hidden','false'); return; }
+        const wrap = document.createElement('div'); wrap.className = 'cond-modal-body';
+        wrap.innerHTML = `<p style="margin-top:0; color: #dfffe8;">${title || 'Conditions'} for <strong>Bubble Gummy Auto</strong></p>`;
+        const list = document.createElement('dl');
+        list.style.display = 'grid'; list.style.gridTemplateColumns = '1fr 1fr'; list.style.gap = '.5rem'; list.style.marginTop = '.5rem';
+        function addRow(k,v){ if(v === undefined || v === null) return; list.innerHTML += `<div><dt style="font-weight:700;color:#eaf3ea">${k}</dt><dd style="margin:0;color:#cfe9d8">${v}</dd></div>`; }
+        addRow('Day', condObj.day || condObj.Day || condObj['day'] || '');
+        addRow('Light cycle', condObj.light || condObj['Light cycle'] || '');
+        addRow('Temperature', (condObj.temp || condObj.Temperature) || '');
+        addRow('Relative humidity', (condObj.rh || condObj['Relative humidity']) || '');
+        addRow('VPD', condObj.vpd || condObj.VPD || '');
+        addRow('Lights', (condObj.lights || condObj.Lights) || '');
+        wrap.appendChild(list);
+        const foot = document.createElement('div'); foot.style.marginTop = '.75rem'; foot.innerHTML = `<button class="btn btn-primary" id="cond-edit-from-modal">Edit conditions</button>`;
+        wrap.appendChild(foot);
+        body.appendChild(wrap);
+        // wire edit
+        const editBtnModal = body.querySelector('#cond-edit-from-modal');
+        if(editBtnModal){ editBtnModal.addEventListener('click', ()=>{ condModal.classList.remove('open'); condModal.setAttribute('aria-hidden','true'); const editBtn = document.getElementById('edit-conditions'); if(editBtn) editBtn.click(); }); }
+        condModal.classList.add('open'); condModal.setAttribute('aria-hidden','false');
+        const close = condModal.querySelector('.modal-close'); if(close) close.focus();
+      }
+
+      // wire per-entry small condition buttons
+      try{
+        const condButtons = Array.from(document.querySelectorAll('.entry-cond'));
+        condButtons.forEach(b => {
+          b.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            const raw = b.getAttribute('data-conds') || '';
+            const parts = raw.split(';').map(s => s.trim()).filter(Boolean);
+            const obj = {};
+            parts.forEach(p => {
+              const idx = p.indexOf('=');
+              if(idx === -1) return;
+              const k = p.slice(0,idx).trim();
+              const v = p.slice(idx+1).trim();
+              // normalize keys
+              obj[k] = v;
+            });
+            renderConditionsModal(obj, b.closest('.timeline-entry') ? (b.closest('.timeline-entry').querySelector('time')||{}).textContent : 'Conditions');
+          });
+        });
+      }catch(e){ /* ignore */ }
 
     }catch(e){
       // fail silently if not on plant page

@@ -310,6 +310,23 @@ input:focus, textarea:focus{outline:3px solid color-mix(in srgb, var(--brand) 25
 .timeline-entry{padding:.75rem; border-radius:8px; background:var(--panel); box-shadow:0 6px 18px rgba(10,10,10,0.03)}
 .timeline-entry .timeline-details{margin-top:.6rem}
 
+/* small green condition box shown next to each timeline entry */
+.entry-cond{
+  display:inline-block;
+  background:linear-gradient(180deg,var(--brand),var(--brand-600));
+  color:white;
+  border-radius:6px;
+  padding:0.25rem 0.5rem;
+  font-size:0.85rem;
+  margin-left:0.6rem;
+  cursor:pointer;
+  border:0;
+}
+.entry-cond:hover{ transform: translateY(-2px); box-shadow:0 8px 18px rgba(31,125,51,0.12); }
+
+.timeline-entry time{vertical-align:middle}
+.timeline-entry .entry-cond{vertical-align:middle}
+
 /* Modal / Popout styles */
 .modal{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; opacity:0; transition:opacity 220ms ease; z-index:80}
 .modal.open{opacity:1; pointer-events:auto}
