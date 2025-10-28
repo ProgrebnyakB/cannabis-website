@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Plants — Grow Log: OG Kush</title>
+  <meta name="description" content="Grow log and progress tracker for OG Kush at Borough Botanicals." />
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/logo-32.png" />
+  <meta name="theme-color" content="#2f9e44" />
+  <meta property="og:title" content="Borough Botanicals — OG Kush Grow Log" />
+  <meta property="og:description" content="A visual grow log example for OG Kush — track stages, watering, notes, and photos." />
+  <meta property="og:image" content="https://progrebnyakb.github.io/cannabis-website/assets/og-image.png" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <div class="logo">
+        <img src="assets/logo.png" srcset="assets/logo@2x.png 2x" alt="Borough Botanicals logo" class="site-logo" />
+        <span class="site-title">Borough Botanicals</span>
+      </div>
+      <nav id="main-nav" class="nav" aria-label="Main Navigation">
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="plants.html">Plants</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="main-nav">Menu</button>
+    </div>
+  </header>
+
+  <main class="container plant-page">
+    <section class="plant-hero card">
+      <div class="grid grid-2">
+        <div>
+          <h1>OG Kush <small class="muted">(Grow log example)</small></h1>
+          <p class="lead">Classic indica-dominant hybrid known for its earthy, piney aroma. This example documents a single plant through germination to flowering.</p>
+
+          <div class="stat-grid">
+            <div>
+              <strong>Strain</strong>
+              <div class="muted">OG Kush</div>
+            </div>
+            <div>
+              <strong>Germinated</strong>
+              <div class="muted" data-germinated="2025-08-01"><span class="days-since">—</span> days</div>
+            </div>
+            <div>
+              <strong>Stage</strong>
+              <div class="muted">Flowering</div>
+            </div>
+            <div>
+              <strong>Progress</strong>
+              <div class="muted"><span class="progress-label">65%</span></div>
+            </div>
+          </div>
+
+          <p style="margin-top:.75rem">Quick care notes: Indoor, 18/6 light for veg, 12/12 to flower. Keep runoff pH around 6.2–6.6. Monitor humidity during flower.</p>
+        </div>
+
+        <div class="card visual-plate">
+          <img src="assets/logo.png" srcset="assets/logo@2x.png 2x" alt="OG Kush — progress photo" class="plant-photo" />
+          <div class="progress">
+            <div class="progress-bar" style="width:65%" aria-hidden="true"></div>
+          </div>
+          <div class="progress-meta muted">Flowering — Week 5</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="timeline card">
+      <h2>Grow Timeline</h2>
+      <ol class="timeline-list">
+        <li class="timeline-entry">
+          <time>2025-08-01 — Germinated</time>
+          <p>Seed split and taproot visible. Placed into damp paper towel and moved to 72°F cabinet.</p>
+        </li>
+        <li class="timeline-entry">
+          <time>2025-08-07 — Seedling</time>
+          <p>First true leaves appeared. Transplanted to 2" starter plug, gentle misting twice daily.</p>
+        </li>
+        <li class="timeline-entry">
+          <time>2025-09-03 — Vegetative</time>
+          <p>Moved to 3-gallon pot; 18/6 light schedule. Feeding with mild veg nutrient at 200ppm.</p>
+        </li>
+        <li class="timeline-entry">
+          <time>2025-10-01 — Pre-flower</time>
+          <p>Noticed pistils and stretch beginning; switched to 12/12 to induce flowering.</p>
+        </li>
+        <li class="timeline-entry">
+          <time>2025-10-27 — Flowering (Week 5)</time>
+          <p>Trichomes milky on upper buds; lowered humidity to 45% and increased potassium-focused feed.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="notes card">
+      <h2>Recent Notes</h2>
+      <ul>
+        <li>2025-10-25 — Flushed lightly due to slight salt build-up.</li>
+        <li>2025-10-20 — Began foliar spray with kelp extract (low dose).</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer class="site-footer container">
+    <div class="grid grid-2">
+      <div>© <span id="year">2025</span> Borough Botanicals</div>
+      <nav aria-label="Footer Navigation">
+        <a href="index.html">Home</a> · <a href="about.html">About</a> · <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="scripts/main.js" defer></script>
+  <script> (function(){ const y = new Date().getFullYear(); const el = document.getElementById('year'); if(el) el.textContent = y; })(); </script>
+</body>
+</html>

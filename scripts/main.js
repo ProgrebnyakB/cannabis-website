@@ -140,6 +140,7 @@
     initSmoothScroll();
     initAjaxForms();
     markActiveNav();
+    initPlantPage();
     // add more init calls here (modals, lightbox, analytics setup, etc.)
   }
 
@@ -148,6 +149,37 @@
     document.addEventListener('DOMContentLoaded', init);
   } else {
     init();
+  }
+
+  /* Plant page helper: compute days since germination and basic timeline behaviour */
+  function initPlantPage(){
+    try{
+      const dateEls = Array.from(document.querySelectorAll('[data-germinated]'));
+      dateEls.forEach(el => {
+        const d = el.getAttribute('data-germinated');
+        if(!d) return;
+        const then = new Date(d + 'T00:00:00');
+        if(isNaN(then)) return;
+        const now = new Date();
+        const days = Math.floor((now - then) / (1000*60*60*24));
+        const span = el.querySelector('.days-since');
+        if(span) span.textContent = days;
+      });
+
+      // timeline expand/collapse (click to toggle details)
+      const entries = document.querySelectorAll('.timeline-entry');
+      entries.forEach(entry => {
+        entry.style.cursor = 'pointer';
+        entry.addEventListener('click', () => {
+          entry.classList.toggle('open');
+          // simple visual: toggle box-shadow intensity
+          if(entry.classList.contains('open')) entry.style.boxShadow = '0 18px 30px rgba(10,10,10,0.06)';
+          else entry.style.boxShadow = '';
+        });
+      });
+    }catch(e){
+      // fail silently if not on plant page
+    }
   }
 
 })();

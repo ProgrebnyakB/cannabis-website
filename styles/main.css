@@ -297,3 +297,20 @@ input:focus, textarea:focus{outline:3px solid color-mix(in srgb, var(--brand) 25
   /* slightly reduce hero gap on small touch devices for better fit */
   .hero-inner{gap:1rem}
 }
+
+/* =========== Plant page styles =========== */
+.plant-page{padding:2rem 0 3rem}
+.plant-hero .stat-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:0.75rem; margin-top:1rem}
+.stat-grid strong{display:block; font-weight:700}
+.plant-photo{width:100%; height:auto; max-width:320px; border-radius:8px; display:block; margin:0 auto 0.75rem}
+.progress{height:12px; background:linear-gradient(180deg, rgba(0,0,0,0.04), rgba(0,0,0,0.02)); border-radius:999px; overflow:hidden; margin-top:0.5rem}
+.progress-bar{height:100%; background:linear-gradient(90deg,var(--brand),var(--brand-600)); border-radius:999px}
+.progress-meta{font-size:0.9rem; margin-top:0.4rem}
+.timeline-list{list-style:none; padding:0; margin:0; display:grid; gap:0.8rem}
+.timeline-entry{padding:.75rem; border-radius:8px; background:var(--panel); box-shadow:0 6px 18px rgba(10,10,10,0.03)}
+.timeline-entry time{display:block; font-weight:700; margin-bottom:0.35rem}
+.plant-page .card h2{margin-top:0}
+
+@media (max-width:900px){
+  .plant-hero .stat-grid{grid-template-columns:1fr}
+}
