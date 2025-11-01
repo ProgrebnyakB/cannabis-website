@@ -811,11 +811,6 @@ function generatePDF() {
     doc.setFont(undefined, 'normal');
     doc.text('Your personalized growing plan', 35, 26);
     
-    // Date and experience badge
-    doc.setFontSize(9);
-    const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    doc.text(`Generated: ${new Date().toLocaleDateString('en-US', dateOptions)}`, 150, 15, { align: 'right' });
-    
     // Experience level badge
     const experienceBadgeLabel = builderData.experience.charAt(0).toUpperCase() + builderData.experience.slice(1);
     const badgeColors = {
