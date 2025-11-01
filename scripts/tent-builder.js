@@ -95,6 +95,7 @@ function handleCardSelection(card) {
     switch(step) {
         case 'step-1':
             builderData.experience = value;
+            adjustBuilderForExperience(value);
             break;
         case 'step-2':
             builderData.tentSize = value;
@@ -110,6 +111,39 @@ function handleCardSelection(card) {
     document.getElementById('btn-next').disabled = false;
 }
 
+function adjustBuilderForExperience(level) {
+    // This function will filter options and adjust detail levels based on experience
+    // Will be called when user selects their experience level
+    
+    if (level === 'beginner') {
+        // Simplify tent sizes - hide 5x5
+        document.querySelectorAll('[data-value="5x5"]').forEach(el => {
+            el.style.display = 'none';
+        });
+        
+        // For medium selection, add warning badge to hydro
+        const hydroCard = document.querySelector('.option-card[data-value="hydro"]');
+        if (hydroCard && !hydroCard.querySelector('.warning-badge')) {
+            const badge = document.createElement('span');
+            badge.className = 'warning-badge';
+            badge.textContent = '⚠️ Not Recommended';
+            hydroCard.appendChild(badge);
+        }
+        
+    } else if (level === 'intermediate') {
+        // Show all options
+        document.querySelectorAll('[data-value="5x5"]').forEach(el => {
+            el.style.display = '';
+        });
+        
+    } else if (level === 'advanced') {
+        // Show all options, enable all advanced features
+        document.querySelectorAll('[data-value="5x5"]').forEach(el => {
+            el.style.display = '';
+        });
+    }
+}
+
 function showMediumWarning(medium) {
     if (medium === 'hydro' && builderData.experience === 'beginner') {
         alert('Note: Hydroponics can be challenging for beginners. Consider starting with soil or coco coir for your first grow.');
@@ -117,8 +151,24 @@ function showMediumWarning(medium) {
 }
 
 function showMediumDetails(medium) {
+    const experience = builderData.experience;
+    
     // Show the medium details container
     const mediumDetails = document.getElementById('medium-details');
+    
+    // For beginners, skip detailed medium options - just basic selection
+    if (experience === 'beginner') {
+        mediumDetails.style.display = 'none';
+        // Auto-select recommended options for beginners
+        if (medium === 'soil') {
+            builderData.mediumDetails.soilBrand = 'fox-farm-ocean';
+        } else if (medium === 'coco') {
+            builderData.mediumDetails.cocoRatio = '70-30';
+        }
+        return;
+    }
+    
+    // For intermediate and advanced, show details
     mediumDetails.style.display = 'block';
     
     // Hide all specific sections
@@ -129,10 +179,38 @@ function showMediumDetails(medium) {
     // Show the relevant section
     if (medium === 'soil') {
         document.getElementById('soil-details').style.display = 'block';
+        
+        // For intermediate, simplify soil options
+        if (experience === 'intermediate') {
+            const soilSelect = document.getElementById('soil-brand');
+            // Hide super advanced options like BuildASoil
+            Array.from(soilSelect.options).forEach(opt => {
+                if (opt.value === 'buildasoil') {
+                    opt.style.display = 'none';
+                }
+            });
+        }
     } else if (medium === 'coco') {
         document.getElementById('coco-details').style.display = 'block';
+        
+        // For intermediate, recommend 70-30
+        if (experience === 'intermediate') {
+            const cocoSelect = document.getElementById('coco-ratio');
+            // Pre-select recommended option
+            cocoSelect.value = '70-30';
+        }
     } else if (medium === 'hydro') {
         document.getElementById('hydro-details').style.display = 'block';
+        
+        // For intermediate, show simpler hydro systems
+        if (experience === 'intermediate') {
+            const hydroSelect = document.getElementById('hydro-type');
+            Array.from(hydroSelect.options).forEach(opt => {
+                if (opt.value === 'aeroponic' || opt.value === 'nft') {
+                    opt.style.display = 'none';
+                }
+            });
+        }
     }
 }
 
@@ -188,11 +266,39 @@ function savePotType() {
 
 function savePotSize() {
     builderData.potSize = parseInt(document.getElementById('pot-size').value);
+    
+    // For beginners, auto-recommend pot sizes based on tent
+    if (builderData.experience === 'beginner') {
+        const tentSize = builderData.tentSize;
+        const recommendedSizes = {
+            '2x2': 3,
+            '3x3': 5,
+            '4x4': 5
+        };
+        
+        // Show a helpful tip if they selected something unusual
+        const recommended = recommendedSizes[tentSize];
+        if (recommended && builderData.potSize !== recommended) {
+            const potSelect = document.getElementById('pot-size');
+            const tip = document.createElement('div');
+            tip.className = 'info-box';
+            tip.innerHTML = `<strong>💡 Beginner Tip:</strong> For your ${tentSize} tent, we recommend ${recommended}-gallon pots for easier management and better results.`;
+            tip.style.marginTop = '10px';
+            
+            // Remove any existing tip
+            const existingTip = potSelect.parentElement.querySelector('.info-box');
+            if (existingTip) existingTip.remove();
+            
+            potSelect.parentElement.appendChild(tip);
+        }
+    }
+    
     checkStepCompletion();
 }
 
 function handleNutrientSelection() {
     const nutrientLine = document.getElementById('nutrient-line').value;
+    const experience = builderData.experience;
     builderData.nutrients.line = nutrientLine;
     
     // Show/hide custom input
@@ -211,6 +317,39 @@ function handleNutrientSelection() {
     if (nutrientLine === 'gaia-green') {
         gaiaProducts.style.display = 'block';
         
+        // For beginners, simplify to just the core products
+        if (experience === 'beginner') {
+            document.querySelectorAll('input[name="gaia-product"]').forEach(checkbox => {
+                const value = checkbox.value;
+                // Only show essential products for beginners
+                if (value === 'all-purpose-444' || value === 'power-bloom-284' || value === 'mykos') {
+                    checkbox.parentElement.style.display = 'flex';
+                } else {
+                    checkbox.parentElement.style.display = 'none';
+                    checkbox.checked = false;
+                }
+            });
+            
+            // Add beginner explanation
+            const gaiaTitle = gaiaProducts.querySelector('h3');
+            let beginnerNote = gaiaProducts.querySelector('.beginner-note');
+            if (!beginnerNote) {
+                beginnerNote = document.createElement('p');
+                beginnerNote.className = 'beginner-note info-box';
+                beginnerNote.innerHTML = '<strong>🌱 Beginner Setup:</strong> We\'ve selected the essential products you need. These three will cover all your bases for a successful first grow!';
+                gaiaTitle.insertAdjacentElement('afterend', beginnerNote);
+            }
+        } else {
+            // Show all products for intermediate/advanced
+            document.querySelectorAll('input[name="gaia-product"]').forEach(checkbox => {
+                checkbox.parentElement.style.display = 'flex';
+            });
+            
+            // Remove beginner note if it exists
+            const beginnerNote = gaiaProducts.querySelector('.beginner-note');
+            if (beginnerNote) beginnerNote.remove();
+        }
+        
         // Setup checkbox listeners
         document.querySelectorAll('input[name="gaia-product"]').forEach(checkbox => {
             checkbox.addEventListener('change', function() {
@@ -228,10 +367,16 @@ function handleNutrientSelection() {
         gaiaProducts.style.display = 'none';
     }
     
-    // Save supplements
-    document.getElementById('supplements').addEventListener('input', function() {
-        builderData.nutrients.supplements = this.value;
-    });
+    // Hide supplements field for beginners (keep it simple)
+    const supplementsGroup = document.getElementById('supplements').parentElement;
+    if (experience === 'beginner') {
+        supplementsGroup.style.display = 'none';
+    } else {
+        supplementsGroup.style.display = 'block';
+        document.getElementById('supplements').addEventListener('input', function() {
+            builderData.nutrients.supplements = this.value;
+        });
+    }
     
     checkStepCompletion();
 }
@@ -299,6 +444,9 @@ function goToNextStep() {
         document.getElementById(`step-${currentStep}`).classList.add('active');
         document.querySelector(`.progress-step[data-step="${currentStep}"]`).classList.add('active');
         
+        // Update step descriptions based on experience level
+        updateStepDescription(currentStep);
+        
         // If we're on the review step, populate the summary
         if (currentStep === totalSteps) {
             populateReview();
@@ -306,6 +454,103 @@ function goToNextStep() {
         
         updateNavigationButtons();
     }
+}
+
+function updateStepDescription(step) {
+    const experience = builderData.experience;
+    if (!experience) return;
+    
+    const descriptions = {
+        beginner: {
+            2: "Don't worry - we'll recommend the right size for you. Start small for your first grow!",
+            3: "Soil is the most forgiving option for beginners. We'll set you up with proven choices.",
+            4: "We'll help you pick containers that make watering and maintenance easy.",
+            5: "Less is more for beginners - we'll help you avoid overcrowding.",
+            6: "Simple, effective nutrients that won't overwhelm you. We've picked the essentials.",
+            7: "These choices affect timing and plant size - we'll explain everything."
+        },
+        intermediate: {
+            2: "You know the basics - choose based on your space and plant goals.",
+            3: "Consider your experience with each medium. Coco offers faster growth with more control.",
+            4: "Fabric pots provide better drainage and root health for your intermediate grow.",
+            5: "Balance plant count with your available time for training and maintenance.",
+            6: "You can handle more complex feeding schedules. Pick what matches your medium.",
+            7: "Consider your light schedule preference and desired plant structure."
+        },
+        advanced: {
+            2: "Maximize your space efficiency and yield per square foot.",
+            3: "Full control over your growing environment. Dial in your preferred medium and ratios.",
+            4: "Optimize container type and size for your specific training techniques.",
+            5: "Plan your canopy management strategy based on your training methods.",
+            6: "Build a custom nutrient program tailored to your specific cultivar needs.",
+            7: "Select genetics that complement your advanced training and environmental control."
+        }
+    };
+    
+    const stepDesc = document.querySelector(`#step-${step} .step-description`);
+    if (stepDesc && descriptions[experience] && descriptions[experience][step]) {
+        stepDesc.textContent = descriptions[experience][step];
+    }
+    
+    // Apply experience-specific filtering for nutrient step
+    if (step === 6) {
+        filterNutrientOptions(experience);
+    }
+    
+    // Apply experience-specific filtering for pot type
+    if (step === 4) {
+        filterPotTypeOptions(experience);
+    }
+}
+
+function filterNutrientOptions(experience) {
+    const nutrientSelect = document.getElementById('nutrient-line');
+    if (!nutrientSelect) return;
+    
+    Array.from(nutrientSelect.options).forEach(option => {
+        if (experience === 'beginner') {
+            // Only show organic options for beginners (easier to use)
+            if (option.parentElement.label === 'Synthetic/Mineral' && option.value !== '') {
+                option.style.display = 'none';
+            } else {
+                option.style.display = '';
+            }
+        } else {
+            // Show all options for intermediate and advanced
+            option.style.display = '';
+        }
+    });
+    
+    // Pre-select Gaia Green for beginners if nothing selected
+    if (experience === 'beginner' && !nutrientSelect.value) {
+        nutrientSelect.value = 'gaia-green';
+        handleNutrientSelection();
+    }
+}
+
+function filterPotTypeOptions(experience) {
+    const potTypeSelect = document.getElementById('pot-type');
+    if (!potTypeSelect) return;
+    
+    Array.from(potTypeSelect.options).forEach(option => {
+        if (experience === 'beginner') {
+            // Hide advanced options like air pots for beginners
+            if (option.value === 'air' || option.value === 'hydro-net') {
+                option.style.display = 'none';
+            } else {
+                option.style.display = '';
+            }
+            
+            // Pre-select fabric pots for beginners
+            if (option.value === 'fabric' && !potTypeSelect.value) {
+                potTypeSelect.value = 'fabric';
+                savePotType();
+            }
+        } else {
+            // Show all options
+            option.style.display = '';
+        }
+    });
 }
 
 function goToPreviousStep() {
