@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grow Tent Builder - Educational Configurator</title>
+    <link rel="stylesheet" href="styles/tent-builder.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌱 Grow Tent Builder</h1>
+            <p>Design your perfect grow setup - we'll guide you every step of the way</p>
+        </header>
+
+        <div class="builder-layout">
+            <!-- Progress Indicator -->
+            <div class="progress-bar">
+                <div class="progress-step active" data-step="1">
+                    <span class="step-number">1</span>
+                    <span class="step-label">Experience</span>
+                </div>
+                <div class="progress-step" data-step="2">
+                    <span class="step-number">2</span>
+                    <span class="step-label">Tent Size</span>
+                </div>
+                <div class="progress-step" data-step="3">
+                    <span class="step-number">3</span>
+                    <span class="step-label">Medium</span>
+                </div>
+                <div class="progress-step" data-step="4">
+                    <span class="step-number">4</span>
+                    <span class="step-label">Plants</span>
+                </div>
+                <div class="progress-step" data-step="5">
+                    <span class="step-number">5</span>
+                    <span class="step-label">Genetics</span>
+                </div>
+                <div class="progress-step" data-step="6">
+                    <span class="step-number">6</span>
+                    <span class="step-label">Review</span>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="content-area">
+                <!-- Step 1: Experience Level -->
+                <div class="step-content active" id="step-1">
+                    <h2>What's your growing experience?</h2>
+                    <p class="step-description">We'll tailor recommendations based on your skill level</p>
+                    
+                    <div class="option-cards">
+                        <div class="option-card" data-value="beginner">
+                            <div class="card-icon">🌱</div>
+                            <h3>Beginner</h3>
+                            <p>First time growing or limited experience</p>
+                        </div>
+                        <div class="option-card" data-value="intermediate">
+                            <div class="card-icon">🌿</div>
+                            <h3>Intermediate</h3>
+                            <p>A few successful grows under your belt</p>
+                        </div>
+                        <div class="option-card" data-value="advanced">
+                            <div class="card-icon">🌳</div>
+                            <h3>Advanced</h3>
+                            <p>Experienced grower looking to optimize</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Tent Size -->
+                <div class="step-content" id="step-2">
+                    <h2>Choose Your Tent Size</h2>
+                    <p class="step-description">Consider your available space and number of plants</p>
+                    
+                    <div class="option-cards">
+                        <div class="option-card" data-value="2x2">
+                            <h3>2' x 2'</h3>
+                            <p>Perfect for 1-2 plants</p>
+                            <span class="recommendation">Great for beginners</span>
+                        </div>
+                        <div class="option-card" data-value="3x3">
+                            <h3>3' x 3'</h3>
+                            <p>Ideal for 2-4 plants</p>
+                            <span class="recommendation">Most popular</span>
+                        </div>
+                        <div class="option-card" data-value="4x4">
+                            <h3>4' x 4'</h3>
+                            <p>Room for 4-6 plants</p>
+                            <span class="recommendation">Best value per plant</span>
+                        </div>
+                        <div class="option-card" data-value="5x5">
+                            <h3>5' x 5'</h3>
+                            <p>Large setup, 6-9 plants</p>
+                            <span class="recommendation">For experienced growers</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Growing Medium -->
+                <div class="step-content" id="step-3">
+                    <h2>Select Your Growing Medium</h2>
+                    <p class="step-description">Each medium has different care requirements</p>
+                    
+                    <div class="option-cards">
+                        <div class="option-card" data-value="soil">
+                            <h3>Soil</h3>
+                            <p><strong>Pros:</strong> Forgiving, natural, easier for beginners</p>
+                            <p><strong>Cons:</strong> Slower growth, more space needed</p>
+                            <span class="difficulty easy">Easy</span>
+                        </div>
+                        <div class="option-card" data-value="coco">
+                            <h3>Coco Coir</h3>
+                            <p><strong>Pros:</strong> Faster growth, reusable, good drainage</p>
+                            <p><strong>Cons:</strong> Requires nutrients, more frequent watering</p>
+                            <span class="difficulty medium">Medium</span>
+                        </div>
+                        <div class="option-card" data-value="hydro">
+                            <h3>Hydroponics</h3>
+                            <p><strong>Pros:</strong> Fastest growth, maximum control</p>
+                            <p><strong>Cons:</strong> Complex setup, requires monitoring</p>
+                            <span class="difficulty hard">Advanced</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Number of Plants & Pot Size -->
+                <div class="step-content" id="step-4">
+                    <h2>Plants & Container Size</h2>
+                    <p class="step-description">We'll validate this fits your tent</p>
+                    
+                    <div class="form-group">
+                        <label for="plant-count">Number of Plants:</label>
+                        <select id="plant-count">
+                            <option value="">Select...</option>
+                            <option value="1">1 plant</option>
+                            <option value="2">2 plants</option>
+                            <option value="3">3 plants</option>
+                            <option value="4">4 plants</option>
+                            <option value="5">5 plants</option>
+                            <option value="6">6 plants</option>
+                            <option value="8">8 plants</option>
+                            <option value="9">9 plants</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pot-size">Pot Size:</label>
+                        <select id="pot-size">
+                            <option value="">Select...</option>
+                            <option value="1">1 gallon (small plants/SOG)</option>
+                            <option value="3">3 gallons (medium plants)</option>
+                            <option value="5">5 gallons (large plants)</option>
+                            <option value="7">7 gallons (extra large)</option>
+                        </select>
+                    </div>
+
+                    <div class="validation-message" id="space-validation"></div>
+                </div>
+
+                <!-- Step 5: Genetics -->
+                <div class="step-content" id="step-5">
+                    <h2>Choose Your Genetics</h2>
+                    <p class="step-description">This affects your grow schedule and tent height needs</p>
+                    
+                    <div class="form-group">
+                        <label for="plant-type">Plant Type:</label>
+                        <select id="plant-type">
+                            <option value="">Select...</option>
+                            <option value="auto">Autoflower (easier, shorter, faster)</option>
+                            <option value="photo">Photoperiod (more control, higher yields)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="strain-type">Strain Preference:</label>
+                        <select id="strain-type">
+                            <option value="">Select...</option>
+                            <option value="indica">Indica (shorter, bushier plants)</option>
+                            <option value="sativa">Sativa (taller, longer flowering)</option>
+                            <option value="hybrid">Hybrid (balanced characteristics)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Step 6: Review & Generate -->
+                <div class="step-content" id="step-6">
+                    <h2>Review Your Setup</h2>
+                    <p class="step-description">Here's what we're building for you</p>
+                    
+                    <div class="review-summary" id="review-summary">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+
+                    <div class="budget-estimate" id="budget-estimate">
+                        <!-- Budget estimate will go here -->
+                    </div>
+
+                    <button class="btn-generate" id="generate-pdf">
+                        📄 Generate Your Custom Grow Guide (PDF)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="navigation-buttons">
+                <button class="btn-secondary" id="btn-back" disabled>← Back</button>
+                <button class="btn-primary" id="btn-next">Next →</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="scripts/tent-builder.js"></script>
+</body>
+</html>

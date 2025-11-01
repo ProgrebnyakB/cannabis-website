@@ -6,6 +6,11 @@
   <title>Plants — Grow Log: Bubble Gummy Auto</title>
   <meta name="description" content="Grow log and progress tracker for Bubble Gummy Auto (Ethos Genetics) at Borough Botanicals." />
   <link rel="stylesheet" href="styles/main.css" />
+  <style>
+    .stat-icon, h3 span {
+      font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+    }
+  </style>
   <link rel="icon" type="image/png" sizes="32x32" href="assets/logo-32.png" />
   <meta name="theme-color" content="#2f9e44" />
   <meta property="og:title" content="Borough Botanicals — Bubble Gummy Auto Grow Log" />
@@ -32,137 +37,831 @@
   </header>
 
   <main class="container plant-page">
-    <section class="plant-hero card">
-      <div class="grid grid-2">
+    
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>🌱 Grow Journal</h1>
+      <p class="lead">Track multiple cultivation projects with detailed grow logs, environmental data, and progress timelines.</p>
+    </div>
+
+    <!-- Today's Tasks Dashboard -->
+    <section class="todays-tasks card">
+      <h2 style="margin: 0 0 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+        <span style="font-size: 1.5rem;">📋</span> Today's Tasks
+        <span style="margin-left: auto; font-size: 0.85rem; font-weight: 400; color: #5a6c5e;">October 29, 2025</span>
+      </h2>
+      
+      <div class="task-grid">
+        <!-- Watering Due -->
+        <div class="task-section">
+          <h3 style="color: #1976d2; margin: 0 0 0.75rem; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            💧 Watering Due
+          </h3>
+          <div class="task-items">
+            <div class="task-item">
+              <span class="task-plant">Bubble Gummy Auto</span>
+              <span class="task-meta">Last watered 2 days ago</span>
+            </div>
+            <div class="task-item">
+              <span class="task-plant">Test Subject (OG Kush)</span>
+              <span class="task-meta">Last watered 1 day ago</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Feeding Due -->
+        <div class="task-section">
+          <h3 style="color: #388e3c; margin: 0 0 0.75rem; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            🌱 Feeding Due
+          </h3>
+          <div class="task-items">
+            <div class="task-item">
+              <span class="task-plant">Bubble Gummy Auto</span>
+              <span class="task-meta">Last fed 3 days ago</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alerts & Checks -->
+        <div class="task-section">
+          <h3 style="color: #f57c00; margin: 0 0 0.75rem; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            ⚠️ Alerts & Checks
+          </h3>
+          <div class="task-items">
+            <div class="task-item alert-item">
+              <span class="task-plant">Pink Kush CBD</span>
+              <span class="task-meta">Check for germination</span>
+            </div>
+            <div class="task-item alert-item">
+              <span class="task-plant">4x4 Tent</span>
+              <span class="task-meta">High humidity (67%)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Plant Selector Cards -->
+    <section class="plant-selector">
+      <h2>Your Plants</h2>
+      <div class="plant-cards">
+        
+        <!-- Plant 1: Bubble Gummy Auto -->
+        <article class="plant-card active" data-plant="bubble-gummy">
+          <div class="plant-card-image">
+            <img src="assets/bubble-gummy.jpg" srcset="assets/bubble-gummy@2x.jpg 2x" alt="Bubble Gummy Auto" />
+            <span class="plant-status status-flowering">🌸 Flowering</span>
+            <span class="health-status health-healthy">🟢</span>
+          </div>
+          <div class="plant-card-content">
+            <h3>Bubble Gummy Auto</h3>
+            <p class="plant-genetics">Ethos Genetics • 5x5 Tent</p>
+            <div class="plant-quick-stats">
+              <span class="stat"><strong>Day 63</strong></span>
+              <span class="stat">20/4 cycle</span>
+              <span class="stat">78°F</span>
+            </div>
+            
+            <!-- Care Tracking -->
+            <div class="care-tracking">
+              <div class="care-item">
+                <span class="care-icon">💧</span>
+                <span class="care-label">Last Water:</span>
+                <span class="care-value">2 days ago</span>
+              </div>
+              <div class="care-item">
+                <span class="care-icon">🌱</span>
+                <span class="care-label">Last Feed:</span>
+                <span class="care-value">3 days ago</span>
+              </div>
+              <div class="care-item">
+                <span class="care-icon">📏</span>
+                <span class="care-label">Medium:</span>
+                <span class="care-value">3 gal pot</span>
+              </div>
+            </div>
+            
+            <div class="plant-card-progress">
+              <div class="progress">
+                <div class="progress-bar" style="width:75%"></div>
+              </div>
+              <span class="progress-label">Week 5 Flower</span>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+              <button class="btn-action btn-water" data-action="water" data-plant="bubble-gummy">💧 Water</button>
+              <button class="btn-action btn-feed" data-action="feed" data-plant="bubble-gummy">🌱 Feed</button>
+              <button class="btn-action btn-note" data-action="note" data-plant="bubble-gummy">📝 Note</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Plant 2: Test Subject (OG Kush) -->
+        <article class="plant-card" data-plant="test-subject">
+          <div class="plant-card-image">
+            <img src="assets/TestSubjectOGKush.jpg" alt="Test Subject OG Kush" />
+            <span class="plant-status status-seedling">🌱 Seedling</span>
+            <span class="health-status health-watch">🟡</span>
+          </div>
+          <div class="plant-card-content">
+            <h3>Test Subject (OG Kush)</h3>
+            <p class="plant-genetics">Auto • 4x4 Tent</p>
+            <div class="plant-quick-stats">
+              <span class="stat"><strong>Day 15</strong></span>
+              <span class="stat">Sprouted 10/14</span>
+            </div>
+            
+            <!-- Care Tracking -->
+            <div class="care-tracking">
+              <div class="care-item">
+                <span class="care-icon">💧</span>
+                <span class="care-label">Last Water:</span>
+                <span class="care-value">1 day ago</span>
+              </div>
+              <div class="care-item">
+                <span class="care-icon">🌱</span>
+                <span class="care-label">Last Feed:</span>
+                <span class="care-value">Never</span>
+              </div>
+              <div class="care-item">
+                <span class="care-icon">📏</span>
+                <span class="care-label">Medium:</span>
+                <span class="care-value">Starter plug</span>
+              </div>
+            </div>
+            
+            <div class="plant-card-progress">
+              <div class="progress">
+                <div class="progress-bar" style="width:16%"></div>
+              </div>
+              <span class="progress-label">Early Seedling</span>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+              <button class="btn-action btn-water" data-action="water" data-plant="test-subject">💧 Water</button>
+              <button class="btn-action btn-feed" data-action="feed" data-plant="test-subject">🌱 Feed</button>
+              <button class="btn-action btn-note" data-action="note" data-plant="test-subject">📝 Note</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Plant 3: Pink Kush CBD -->
+        <article class="plant-card" data-plant="pink-kush">
+          <div class="plant-card-image">
+            <span class="health-status health-watch" title="Watch - Germinating">🟡</span>
+            <img src="assets/pinkkushcbd.jpg" alt="Pink Kush CBD" />
+            <span class="plant-status status-germination">💧 Germinating</span>
+          </div>
+          <div class="plant-card-content">
+            <h3>Pink Kush CBD</h3>
+            <p class="plant-genetics">30:1 Auto</p>
+            <div class="plant-quick-stats">
+              <span class="stat"><strong>Day 0</strong></span>
+              <span class="stat">Started 10/29</span>
+            </div>
+            
+            <div class="care-tracking">
+              <div class="care-item">
+                <span class="care-icon">💧</span>
+                <span class="care-label">Last Water:</span>
+                <span class="care-value">Not yet</span>
+              </div>
+              <div class="care-item">
+                <span class="care-icon">🌱</span>
+                <span class="care-label">Last Feed:</span>
+                <span class="care-value">N/A</span>
+              </div>
+              <div class="care-item">
+                <span class="care-icon">🌍</span>
+                <span class="care-label">Medium:</span>
+                <span class="care-value">Seed</span>
+              </div>
+            </div>
+
+            <div class="quick-actions">
+              <button class="btn-action btn-water" data-action="water" data-plant="pink-kush">💧 Water</button>
+              <button class="btn-action btn-feed" data-action="feed" data-plant="pink-kush">🌱 Feed</button>
+              <button class="btn-action btn-note" data-action="note" data-plant="pink-kush">📝 Note</button>
+            </div>
+            
+            <div class="plant-card-progress">
+              <div class="progress">
+                <div class="progress-bar" style="width:0%"></div>
+              </div>
+              <span class="progress-label">Germination</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Plant 4: Purplematic CBD -->
+        <article class="plant-card" data-plant="purplematic">
+          <div class="plant-card-image">
+            <span class="health-status health-watch" title="Watch - Germinating">🟡</span>
+            <img src="assets/purplematic.jpg" alt="Purplematic CBD" />
+            <span class="plant-status status-germination">💧 Germinating</span>
+          </div>
+          <div class="plant-card-content">
+            <h3>Purplematic CBD</h3>
+            <p class="plant-genetics">CBD Auto</p>
+            <div class="plant-quick-stats">
+              <span class="stat"><strong>Day 0</strong></span>
+              <span class="stat">Started 10/29</span>
+            </div>
+            
+            <div class="care-tracking">
+              <div class="care-item">
+                <span class="care-icon">💧</span>
+                <span class="care-label">Last Water:</span>
+                <span class="care-value">Not yet</span>
+              </div>
+              <div class="care-item">
+                <span class="care-icon">🌱</span>
+                <span class="care-label">Last Feed:</span>
+                <span class="care-value">N/A</span>
+              </div>
+              <div class="care-item">
+                <span class="care-icon">🌍</span>
+                <span class="care-label">Medium:</span>
+                <span class="care-value">Seed</span>
+              </div>
+            </div>
+
+            <div class="quick-actions">
+              <button class="btn-action btn-water" data-action="water" data-plant="purplematic">💧 Water</button>
+              <button class="btn-action btn-feed" data-action="feed" data-plant="purplematic">🌱 Feed</button>
+              <button class="btn-action btn-note" data-action="note" data-plant="purplematic">📝 Note</button>
+            </div>
+            
+            <div class="plant-card-progress">
+              <div class="progress">
+                <div class="progress-bar" style="width:0%"></div>
+              </div>
+              <span class="progress-label">Germination</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Plant 5: Lilac D & ZSweet -->
+        <article class="plant-card" data-plant="lilac-zsweet">
+          <div class="plant-card-image">
+            <span class="health-status health-watch" title="Watch - Germinating">🟡</span>
+            <img src="assets/lilacDxZSweet.jpg" alt="Lilac D & ZSweet" />
+            <span class="plant-status status-germination">💧 Germinating</span>
+          </div>
+          <div class="plant-card-content">
+            <h3>Lilac D & ZSweet</h3>
+            <p class="plant-genetics">Auto</p>
+            <div class="plant-quick-stats">
+              <span class="stat"><strong>Day 0</strong></span>
+              <span class="stat">Started 10/29</span>
+            </div>
+            
+            <div class="care-tracking">
+              <div class="care-item">
+                <span class="care-icon">💧</span>
+                <span class="care-label">Last Water:</span>
+                <span class="care-value">Not yet</span>
+              </div>
+              <div class="care-item">
+                <span class="care-icon">🌱</span>
+                <span class="care-label">Last Feed:</span>
+                <span class="care-value">N/A</span>
+              </div>
+              <div class="care-item">
+                <span class="care-icon">🌍</span>
+                <span class="care-label">Medium:</span>
+                <span class="care-value">Seed</span>
+              </div>
+            </div>
+
+            <div class="quick-actions">
+              <button class="btn-action btn-water" data-action="water" data-plant="lilac-zsweet">💧 Water</button>
+              <button class="btn-action btn-feed" data-action="feed" data-plant="lilac-zsweet">🌱 Feed</button>
+              <button class="btn-action btn-note" data-action="note" data-plant="lilac-zsweet">📝 Note</button>
+            </div>
+            
+            <div class="plant-card-progress">
+              <div class="progress">
+                <div class="progress-bar" style="width:0%"></div>
+              </div>
+              <span class="progress-label">Germination</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Plant 6: Lemon Cherry Gelato -->
+        <article class="plant-card" data-plant="lemon-cherry">
+          <div class="plant-card-image">
+            <span class="health-status health-watch" title="Watch - Germinating">🟡</span>
+            <img src="assets/Lemon Cherry Cookies.jpg" alt="Lemon Cherry Gelato" />
+            <span class="plant-status status-germination">💧 Germinating</span>
+          </div>
+          <div class="plant-card-content">
+            <h3>Lemon Cherry Gelato</h3>
+            <p class="plant-genetics">Cookies Auto</p>
+            <div class="plant-quick-stats">
+              <span class="stat"><strong>Day 0</strong></span>
+              <span class="stat">Started 10/27</span>
+            </div>
+            
+            <div class="care-tracking">
+              <div class="care-item">
+                <span class="care-icon">💧</span>
+                <span class="care-label">Last Water:</span>
+                <span class="care-value">Not yet</span>
+              </div>
+              <div class="care-item">
+                <span class="care-icon">🌱</span>
+                <span class="care-label">Last Feed:</span>
+                <span class="care-value">N/A</span>
+              </div>
+              <div class="care-item">
+                <span class="care-icon">🌍</span>
+                <span class="care-label">Medium:</span>
+                <span class="care-value">Seed</span>
+              </div>
+            </div>
+
+            <div class="quick-actions">
+              <button class="btn-action btn-water" data-action="water" data-plant="lemon-cherry">💧 Water</button>
+              <button class="btn-action btn-feed" data-action="feed" data-plant="lemon-cherry">🌱 Feed</button>
+              <button class="btn-action btn-note" data-action="note" data-plant="lemon-cherry">📝 Note</button>
+            </div>
+            
+            <div class="plant-card-progress">
+              <div class="progress">
+                <div class="progress-bar" style="width:0%"></div>
+              </div>
+              <span class="progress-label">Germination</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Plant 7: Alaskan Bananaberry -->
+        <article class="plant-card" data-plant="alaskan-bananaberry">
+          <div class="plant-card-image">
+            <span class="health-status health-watch" title="Watch - Germinating">🟡</span>
+            <img src="assets/Alaskan Bananaberry.jpg" alt="Alaskan Bananaberry" />
+            <span class="plant-status status-germination">💧 Germinating</span>
+          </div>
+          <div class="plant-card-content">
+            <h3>Alaskan Bananaberry</h3>
+            <p class="plant-genetics">Auto</p>
+            <div class="plant-quick-stats">
+              <span class="stat"><strong>Day 0</strong></span>
+              <span class="stat">Started 10/29</span>
+            </div>
+            
+            <div class="care-tracking">
+              <div class="care-item">
+                <span class="care-icon">💧</span>
+                <span class="care-label">Last Water:</span>
+                <span class="care-value">Not yet</span>
+              </div>
+              <div class="care-item">
+                <span class="care-icon">🌱</span>
+                <span class="care-label">Last Feed:</span>
+                <span class="care-value">N/A</span>
+              </div>
+              <div class="care-item">
+                <span class="care-icon">🌍</span>
+                <span class="care-label">Medium:</span>
+                <span class="care-value">Seed</span>
+              </div>
+            </div>
+
+            <div class="quick-actions">
+              <button class="btn-action btn-water" data-action="water" data-plant="alaskan-bananaberry">💧 Water</button>
+              <button class="btn-action btn-feed" data-action="feed" data-plant="alaskan-bananaberry">🌱 Feed</button>
+              <button class="btn-action btn-note" data-action="note" data-plant="alaskan-bananaberry">📝 Note</button>
+            </div>
+            
+            <div class="plant-card-progress">
+              <div class="progress">
+                <div class="progress-bar" style="width:0%"></div>
+              </div>
+              <span class="progress-label">Germination</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Plant Detail View -->
+    <div id="plant-detail-bubble-gummy" class="plant-detail active">
+      
+      <!-- Live Stats Dashboard -->
+      <section class="stats-dashboard card">
+        <div class="stats-header">
+          <h2>Live Environment Stats</h2>
+        </div>
+        
+        <!-- 5x5 Tent -->
+        <div style="margin-bottom: 2rem;">
+          <h3 style="margin: 0 0 1rem; color: var(--brand); font-size: 1.1rem;"><span>🏕️</span> 5x5 Grow Tent</h3>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon">🌡️</div>
+              <div class="stat-content">
+                <div class="stat-label">Temperature</div>
+                <div class="stat-value" id="stat-temp-5x5">77°F</div>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">💧</div>
+              <div class="stat-content">
+                <div class="stat-label">Humidity</div>
+                <div class="stat-value" id="stat-rh-5x5">52%</div>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">📊</div>
+              <div class="stat-content">
+                <div class="stat-label">VPD</div>
+                <div class="stat-value" id="stat-vpd-5x5">1.5 kPa</div>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">☀️</div>
+              <div class="stat-content">
+                <div class="stat-label">Light Cycle</div>
+                <div class="stat-value" id="stat-light-5x5">20/4</div>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">💡</div>
+              <div class="stat-content">
+                <div class="stat-label">Light Output</div>
+                <div class="stat-value" id="stat-lights-5x5">80%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4x4 Tent -->
         <div>
-          <h1>Bubble Gummy Auto <small class="muted">(Ethos Genetics — Grow log example)</small></h1>
-          <p class="lead">Auto-flowering cultivar with sweet, dessert-like terpene notes. This example documents a single plant through germination to flower and ripening.</p>
-
-          <h4 style="margin-top:0;">Initial conditions</h4>
-          <div class="stat-grid">
-            <div>
-              <strong>Edible</strong>
-              <div class="muted">Bubble Gummy Auto (Ethos)</div>
+          <h3 style="margin: 0 0 1rem; color: var(--brand); font-size: 1.1rem;"><span>🏕️</span> 4x4 Grow Tent</h3>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon">🌡️</div>
+              <div class="stat-content">
+                <div class="stat-label">Temperature</div>
+                <div class="stat-value" id="stat-temp-4x4">75°F</div>
+              </div>
             </div>
-            <div>
-              <strong>Days</strong>
-              <!-- set germination so the animated counter reads 63 on current date -->
-              <div class="muted" data-germinated="2025-08-25"><span class="days-since">—</span> days</div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">💧</div>
+              <div class="stat-content">
+                <div class="stat-label">Humidity</div>
+                <div class="stat-value" id="stat-rh-4x4">67%</div>
+              </div>
             </div>
-            <div>
-              <strong>Light cycle</strong>
-              <div class="muted">20/4</div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">📊</div>
+              <div class="stat-content">
+                <div class="stat-label">VPD</div>
+                <div class="stat-value" id="stat-vpd-4x4">1.0 kPa</div>
+              </div>
             </div>
-            <div>
-              <strong>Temp</strong>
-              <div class="muted">~78°F</div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">☀️</div>
+              <div class="stat-content">
+                <div class="stat-label">Light Cycle</div>
+                <div class="stat-value" id="stat-light-4x4">20/4</div>
+              </div>
             </div>
-            <div>
-              <strong>Humidity</strong>
-              <div class="muted">45% RH</div>
-            </div>
-            <div>
-              <strong>VPD</strong>
-              <div class="muted">~1.8</div>
-            </div>
-            <div>
-              <strong>Lights</strong>
-              <div class="muted">80% capacity</div>
+            
+            <div class="stat-card">
+              <div class="stat-icon">💡</div>
+              <div class="stat-content">
+                <div class="stat-label">Light Output</div>
+                <div class="stat-value" id="stat-lights-4x4">35%</div>
+              </div>
             </div>
           </div>
+        </div>
 
-          <div class="current-conditions" style="margin-top:1rem">
-            <h4 style="margin:0 0 .5rem">Current conditions</h4>
-            <ul style="list-style:none; padding:0; margin:0; display:grid; grid-template-columns:repeat(2,1fr); gap:.5rem;">
-              <li><strong>Day</strong><div class="muted">63</div></li>
-              <li><strong>Light cycle</strong><div class="muted">20 / 4</div></li>
-              <li><strong>Temperature</strong><div class="muted">78°F</div></li>
-              <li><strong>Relative humidity</strong><div class="muted">45%</div></li>
-              <li><strong>VPD</strong><div class="muted">1.8 kPa</div></li>
-              <li><strong>Lights</strong><div class="muted">80% output</div></li>
+        <!-- Edit Form (Hidden) -->
+        <form id="cond-form" class="cond-form" style="display:none; margin-top:1.5rem; padding-top:1.5rem; border-top:1px solid rgba(0,0,0,0.08)">
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1rem;">
+            <label>
+              <span style="font-weight:600; display:block; margin-bottom:0.25rem">Day</span>
+              <input name="day" type="number" min="0" style="width:100%; padding:0.5rem; border-radius:6px; border:1px solid rgba(0,0,0,0.12)" />
+            </label>
+            <label>
+              <span style="font-weight:600; display:block; margin-bottom:0.25rem">Light Cycle</span>
+              <input name="light" type="text" placeholder="20/4" style="width:100%; padding:0.5rem; border-radius:6px; border:1px solid rgba(0,0,0,0.12)" />
+            </label>
+            <label>
+              <span style="font-weight:600; display:block; margin-bottom:0.25rem">Temperature (°F)</span>
+              <input name="temp" type="number" step="0.1" style="width:100%; padding:0.5rem; border-radius:6px; border:1px solid rgba(0,0,0,0.12)" />
+            </label>
+            <label>
+              <span style="font-weight:600; display:block; margin-bottom:0.25rem">Humidity (%)</span>
+              <input name="rh" type="number" step="0.1" style="width:100%; padding:0.5rem; border-radius:6px; border:1px solid rgba(0,0,0,0.12)" />
+            </label>
+            <label>
+              <span style="font-weight:600; display:block; margin-bottom:0.25rem">VPD (kPa)</span>
+              <input name="vpd" type="number" step="0.1" style="width:100%; padding:0.5rem; border-radius:6px; border:1px solid rgba(0,0,0,0.12)" />
+            </label>
+            <label>
+              <span style="font-weight:600; display:block; margin-bottom:0.25rem">Light Output (%)</span>
+              <input name="lights" type="number" min="0" max="100" style="width:100%; padding:0.5rem; border-radius:6px; border:1px solid rgba(0,0,0,0.12)" />
+            </label>
+          </div>
+          <div style="margin-top:1rem; display:flex; gap:0.5rem;">
+            <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+            <button type="button" id="cond-cancel" class="btn btn-ghost">Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Growth Stage Indicator -->
+      <section class="growth-stage-indicator card">
+        <h3>Current Growth Stage</h3>
+        <div class="stage-tracker">
+          <div class="stage completed">
+            <div class="stage-dot"></div>
+            <div class="stage-label">Germination</div>
+          </div>
+          <div class="stage-line completed"></div>
+          <div class="stage completed">
+            <div class="stage-dot"></div>
+            <div class="stage-label">Seedling</div>
+          </div>
+          <div class="stage-line completed"></div>
+          <div class="stage completed">
+            <div class="stage-dot"></div>
+            <div class="stage-label">Vegetative</div>
+          </div>
+          <div class="stage-line completed"></div>
+          <div class="stage completed">
+            <div class="stage-dot"></div>
+            <div class="stage-label">Pre-flower</div>
+          </div>
+          <div class="stage-line active"></div>
+          <div class="stage active">
+            <div class="stage-dot"></div>
+            <div class="stage-label">Flowering</div>
+          </div>
+          <div class="stage-line"></div>
+          <div class="stage">
+            <div class="stage-dot"></div>
+            <div class="stage-label">Harvest</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Plant Info Grid -->
+      <div class="grid grid-2" style="gap:1.5rem; margin-top:1.5rem">
+        
+        <!-- Timeline -->
+        <section class="timeline-card card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="margin: 0;">📅 Growth Timeline</h2>
+            <div class="timeline-filters">
+              <button class="filter-btn active" data-filter="all">All</button>
+              <button class="filter-btn" data-filter="water">💧</button>
+              <button class="filter-btn" data-filter="feed">🌱</button>
+              <button class="filter-btn" data-filter="training">✂️</button>
+              <button class="filter-btn" data-filter="note">📝</button>
+            </div>
+          </div>
+          <div class="timeline">
+            
+            <article class="timeline-entry">
+              <div class="entry-dot"></div>
+              <div class="entry-content">
+                <time>Aug 1, 2025 — Day 0</time>
+                <h3>Germinated <span class="badge badge-success">🌱</span></h3>
+                <p>Seed split and taproot visible. Placed into damp paper towel at 72°F.</p>
+                <button class="btn btn-link entry-cond" data-temp="72" data-rh="60" data-vpd="—">📊 Conditions</button>
+              </div>
+            </article>
+
+            <article class="timeline-entry">
+              <div class="entry-dot"></div>
+              <div class="entry-content">
+                <time>Aug 7, 2025 — Day 6</time>
+                <h3>Seedling Emerged <span class="badge badge-success">🌿</span></h3>
+                <p>First true leaves appeared. Transplanted to 2" starter plug with gentle misting.</p>
+                <button class="btn btn-link entry-cond" data-temp="75" data-rh="65" data-vpd="—">📊 Conditions</button>
+              </div>
+            </article>
+
+            <article class="timeline-entry">
+              <div class="entry-dot"></div>
+              <div class="entry-content">
+                <time>Sep 3, 2025 — Day 33</time>
+                <h3>Vegetative Growth <span class="badge badge-info">🍃</span></h3>
+                <p>Moved to 3-gallon pot. Switched to 18/6 light schedule. Feeding at 200ppm.</p>
+                <button class="btn btn-link entry-cond" data-temp="76" data-rh="55" data-vpd="1.1">📊 Conditions</button>
+              </div>
+            </article>
+
+            <article class="timeline-entry">
+              <div class="entry-dot"></div>
+              <div class="entry-content">
+                <time>Oct 1, 2025 — Day 61</time>
+                <h3>Pre-flower Transition <span class="badge badge-warning">🌸</span></h3>
+                <p>First pistils visible. Stretch beginning. Switched to 12/12 to induce flowering.</p>
+                <button class="btn btn-link entry-cond" data-temp="77" data-rh="50" data-vpd="1.3">📊 Conditions</button>
+              </div>
+            </article>
+
+            <article class="timeline-entry">
+              <div class="entry-dot"></div>
+              <div class="entry-content">
+                <time>Oct 27, 2025 — Day 87</time>
+                <h3>Flowering Week 5 <span class="badge badge-primary">🌺</span></h3>
+                <p>Trichomes milky on upper buds. Lowered RH to 45% and increased K feed.</p>
+                <button class="btn btn-link entry-cond" data-temp="78" data-rh="45" data-vpd="1.8">📊 Conditions</button>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- Notes & Care Log -->
+        <section class="notes-card card">
+          <h2>📝 Care Notes</h2>
+          
+          <div class="quick-info" style="background:#f0f9f0; padding:1rem; border-radius:8px; margin-bottom:1.5rem; border-left:4px solid var(--brand)">
+            <h4 style="margin:0 0 0.5rem; color:var(--brand)">💡 Quick Care Tips</h4>
+            <ul style="margin:0; padding-left:1.25rem; font-size:0.95rem; line-height:1.8">
+              <li>Indoor grow, 20/4 light throughout lifecycle</li>
+              <li>Keep runoff pH around 6.2–6.6</li>
+              <li>Monitor humidity closely during flower (40-50%)</li>
+              <li>Check trichomes daily in late flower</li>
             </ul>
-            <div class="cond-actions" style="margin-top:.75rem">
-              <button id="edit-conditions" class="btn btn-ghost">Edit conditions</button>
+          </div>
+
+          <div id="notes-list" class="notes-list">
+            <div class="note-item">
+              <div class="note-date">Oct 25, 2025</div>
+              <div class="note-content">Flushed lightly due to slight salt build-up. Runoff EC back to normal range.</div>
             </div>
-
-            <form id="cond-form" class="cond-form" style="display:none; margin-top:.75rem">
-              <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:.5rem;">
-                <label>Day <input name="day" type="number" min="0" /></label>
-                <label>Light cycle <input name="light" type="text" /></label>
-                <label>Temperature (°F) <input name="temp" type="number" step="0.1" /></label>
-                <label>Relative humidity (%) <input name="rh" type="number" step="0.1" /></label>
-                <label>VPD <input name="vpd" type="number" step="0.1" /></label>
-                <label>Lights (%) <input name="lights" type="number" min="0" max="100" /></label>
-              </div>
-              <div style="margin-top:.5rem; display:flex; gap:.5rem;">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button type="button" id="cond-cancel" class="btn btn-ghost">Cancel</button>
-              </div>
-            </form>
+            <div class="note-item">
+              <div class="note-date">Oct 20, 2025</div>
+              <div class="note-content">Began foliar spray with kelp extract (low dose). Applied early morning.</div>
+            </div>
+            <div class="note-item">
+              <div class="note-date">Oct 15, 2025</div>
+              <div class="note-content">Defoliated lower fan leaves to improve airflow. Removed ~15 leaves.</div>
+            </div>
           </div>
 
-          <p style="margin-top:.75rem">Quick care notes: Indoor, 18/6 light for veg, 12/12 to flower. Keep runoff pH around 6.2–6.6. Monitor humidity during flower.</p>
-        </div>
+          <form id="note-form" class="note-form">
+            <label style="font-weight:600; display:block; margin-bottom:0.5rem">Add New Note</label>
+            <div style="display:flex; gap:0.5rem;">
+              <input name="note" type="text" placeholder="e.g., Watered 500ml, added bloom nutrients" style="flex:1; padding:0.75rem; border-radius:6px; border:1px solid rgba(0,0,0,0.12); font-size:0.95rem" required />
+              <button type="submit" class="btn btn-primary">➕ Add</button>
+            </div>
+          </form>
+        </section>
 
-        <div class="card visual-plate">
-          <!-- Example: replace with your Bubble Gummy Auto photo at assets/bubble-gummy.jpg -->
-          <img src="assets/bubble-gummy.jpg" srcset="assets/bubble-gummy@2x.jpg 2x" alt="Bubble Gummy Auto — progress photo" class="plant-photo" />
-          <div class="progress">
-            <div class="progress-bar" style="width:65%" aria-hidden="true"></div>
-          </div>
-          <div class="progress-meta muted">Flowering — Week 5</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="timeline card">
-      <h2>Grow Timeline</h2>
-      <ol class="timeline-list">
-        <li class="timeline-entry" data-photos="assets/bubble-gummy.jpg">
-          <time>2025-08-01 — Germinated</time>
-          <button class="entry-cond" data-conds="day=1;light=20/4;temp=72°F;rh=60%" aria-label="View current conditions">CC</button>
-          <p>Seed split and taproot visible. Placed into damp paper towel and moved to 72°F cabinet.</p>
-        </li>
-        <li class="timeline-entry" data-photos="assets/bubble-gummy.jpg,assets/bubble-gummy@2x.jpg">
-          <time>2025-08-07 — Seedling</time>
-          <button class="entry-cond" data-conds="day=7;light=20/4;temp=75°F;rh=65%" aria-label="View current conditions">CC</button>
-          <p>First true leaves appeared. Transplanted to 2" starter plug, gentle misting twice daily.</p>
-        </li>
-        <li class="timeline-entry" data-photos="assets/bubble-gummy.jpg">
-          <time>2025-09-03 — Vegetative</time>
-          <button class="entry-cond" data-conds="day=35;light=18/6;temp=76°F;rh=55%" aria-label="View current conditions">CC</button>
-          <p>Moved to 3-gallon pot; 18/6 light schedule. Feeding with mild veg nutrient at 200ppm.</p>
-        </li>
-        <li class="timeline-entry" data-photos="assets/bubble-gummy.jpg">
-          <time>2025-10-01 — Pre-flower</time>
-          <button class="entry-cond" data-conds="day=56;light=12/12;temp=77°F;rh=50%" aria-label="View current conditions">CC</button>
-          <p>Noticed pistils and stretch beginning; switched to 12/12 to induce flowering.</p>
-        </li>
-        <li class="timeline-entry" data-photos="assets/bubble-gummy.jpg,assets/bubble-gummy@2x.jpg">
-          <time>2025-10-27 — Flowering (Week 5)</time>
-          <button class="entry-cond" data-conds="day=63;light=12/12;temp=78°F;rh=45%;vpd=1.8;lights=80%" aria-label="View current conditions">CC</button>
-          <p>Trichomes milky on upper buds; lowered humidity to 45% and increased potassium-focused feed.</p>
-        </li>
-      </ol>
-    </section>
-
-    <section class="notes card">
-      <h2>Recent Notes</h2>
-      <div id="notes-list">
-        <ul>
-          <li>2025-10-25 — Flushed lightly due to slight salt build-up.</li>
-          <li>2025-10-20 — Began foliar spray with kelp extract (low dose).</li>
-        </ul>
       </div>
 
-      <form id="note-form" class="notes-form" style="margin-top:.75rem">
-        <label style="display:block">Add a quick note</label>
-        <div style="display:flex; gap:.5rem; max-width:560px">
-          <input name="note" type="text" placeholder="e.g. watered 500ml, added kelp" style="flex:1; padding:.5rem; border-radius:6px; border:1px solid rgba(0,0,0,0.06)" required />
-          <button class="btn btn-primary" type="submit">Add</button>
+    </div>
+
+    <!-- Test Subject (OG Kush) Detail -->
+    <div id="plant-detail-test-subject" class="plant-detail">
+      <section class="card">
+        <h2>🌱 Test Subject (OG Kush) — Auto</h2>
+        <p class="lead">Sprouted on October 14, 2025 at 9:00 PM</p>
+        
+        <div class="timeline">
+          <article class="timeline-entry">
+            <div class="entry-dot"></div>
+            <div class="entry-content">
+              <time>Oct 14, 2025 — Day 0</time>
+              <h3>Sprouted 🌱</h3>
+              <p>Seedling emerged. Started at 9:00 PM.</p>
+            </div>
+          </article>
         </div>
-      </form>
-    </section>
+      </section>
+    </div>
+
+    <!-- Pink Kush CBD Detail -->
+    <div id="plant-detail-pink-kush" class="plant-detail">
+      <section class="card">
+        <h2>🌿 Pink Kush CBD 30:1 Auto</h2>
+        <p class="lead">High CBD strain with 30:1 CBD:THC ratio. Germination started October 29, 2025 at 3:00 PM.</p>
+        
+        <div class="timeline">
+          <article class="timeline-entry">
+            <div class="entry-dot"></div>
+            <div class="entry-content">
+              <time>Oct 29, 2025 — Day 0</time>
+              <h3>Germination Started 💧</h3>
+              <p>Seed placed in medium at 3:00 PM. Awaiting emergence.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <!-- Purplematic CBD Detail -->
+    <div id="plant-detail-purplematic" class="plant-detail">
+      <section class="card">
+        <h2>💜 Purplematic CBD</h2>
+        <p class="lead">CBD-rich autoflower from Royal Queen Seeds. Germination started October 29, 2025 at 5:00 PM.</p>
+        
+        <div class="timeline">
+          <article class="timeline-entry">
+            <div class="entry-dot"></div>
+            <div class="entry-content">
+              <time>Oct 29, 2025 — Day 0</time>
+              <h3>Germination Started 💧</h3>
+              <p>Seed placed in medium at 5:00 PM. Awaiting emergence.</p>
+            </div>
+          </article>
+        </div>
+        
+        <div class="quick-info" style="background:#f0f9f0; padding:1rem; border-radius:8px; margin-top:1.5rem; border-left:4px solid var(--brand)">
+          <h4 style="margin:0 0 0.5rem; color:var(--brand)">📦 Seed Package Info</h4>
+          <ul style="margin:0; padding-left:1.25rem; font-size:0.95rem; line-height:1.8">
+            <li>Packet FRI: 2024</li>
+            <li>Barcode: 8809116011181</li>
+            <li>Breeder: Royal Queen Seeds</li>
+            <li>Seed Purity: 99.9%</li>
+            <li>Germination: >99%</li>
+            <li>Weight: 0.9g</li>
+            <li>Inert Matter: <0.01%</li>
+            <li>Weed Seeds: <0.01%</li>
+            <li>Distributed by: PC 8638, Eugene, OR 97401</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <!-- Lilac D & ZSweet Detail -->
+    <div id="plant-detail-lilac-zsweet" class="plant-detail">
+      <section class="card">
+        <h2>💜 Lilac D & ZSweet Auto</h2>
+        <p class="lead">Diesel genetics with floral undertones. Germination started October 29, 2025 at 5:00 PM.</p>
+        
+        <div class="timeline">
+          <article class="timeline-entry">
+            <div class="entry-dot"></div>
+            <div class="entry-content">
+              <time>Oct 29, 2025 — Day 0</time>
+              <h3>Germination Started 💧</h3>
+              <p>Seed placed in medium at 5:00 PM. Awaiting emergence.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <!-- Lemon Cherry Gelato Detail -->
+    <div id="plant-detail-lemon-cherry" class="plant-detail">
+      <section class="card">
+        <h2>🍋 Lemon Cherry Gelato — Cookies Auto</h2>
+        <p class="lead">Sweet citrus and cherry flavors from Cookies genetics. Germination started October 27, 2025 at 10:40 AM.</p>
+        
+        <div class="timeline">
+          <article class="timeline-entry">
+            <div class="entry-dot"></div>
+            <div class="entry-content">
+              <time>Oct 27, 2025 — Day 0</time>
+              <h3>Germination Started 💧</h3>
+              <p>Seed placed in medium at 10:40 AM. Awaiting emergence.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+
+    <!-- Alaskan Bananaberry Detail -->
+    <div id="plant-detail-alaskan-bananaberry" class="plant-detail">
+      <section class="card">
+        <h2>❄️ Alaskan Bananaberry Auto</h2>
+        <p class="lead">Hardy northern genetics with tropical flavor. Germination started October 29, 2025 at 5:00 PM.</p>
+        
+        <div class="timeline">
+          <article class="timeline-entry">
+            <div class="entry-dot"></div>
+            <div class="entry-content">
+              <time>Oct 29, 2025 — Day 0</time>
+              <h3>Germination Started 💧</h3>
+              <p>Seed placed in medium at 5:00 PM. Awaiting emergence.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
 
   </main>
 
@@ -187,6 +886,56 @@
       <div class="modal-content">
         <h3 class="modal-title">Current conditions</h3>
         <div class="modal-body" aria-live="polite"></div>
+      </div>
+    </div>
+    <div class="modal-backdrop" data-dismiss></div>
+  </div>
+
+  <!-- Action Modal (Water/Feed/Note) -->
+  <div id="action-modal" class="action-modal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <h2>Log Action</h2>
+      <form id="action-form">
+        <input type="hidden" name="action-type" />
+        <input type="hidden" name="plant-id" />
+        
+        <div class="form-group">
+          <label for="action-datetime">Date & Time</label>
+          <input type="datetime-local" name="action-datetime" id="action-datetime" required />
+        </div>
+        
+        <div class="form-group" id="amount-group">
+          <label for="action-amount">Amount</label>
+          <input type="text" name="action-amount" id="action-amount" placeholder="e.g., 500ml, 1 gallon" />
+        </div>
+        
+        <div class="form-group" id="nutrients-group">
+          <label for="action-nutrients">Nutrients/pH</label>
+          <input type="text" name="action-nutrients" id="action-nutrients" placeholder="e.g., NPK 5-5-5, pH 6.5" />
+        </div>
+        
+        <div class="form-group">
+          <label for="action-notes">Notes (optional)</label>
+          <textarea name="action-notes" id="action-notes" rows="3" placeholder="Any observations..."></textarea>
+        </div>
+        
+        <div class="modal-actions">
+          <button type="submit" class="btn-save">Save</button>
+          <button type="button" class="btn-cancel">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- OLD MODAL CODE REMOVED -->
+  <div id="old-action-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true" style="display:none;">
+    <div class="modal-panel card" style="max-width: 500px;">
+      <button class="modal-close" aria-label="Close">×</button>
+      <div class="modal-content">
+        <h3 class="modal-title" id="action-modal-title">Log Action</h3>
+        <form id="old-action-form" class="action-form">
+          <!-- This old form is kept hidden as backup -->
+        </form>
       </div>
     </div>
     <div class="modal-backdrop" data-dismiss></div>

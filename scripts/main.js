@@ -53,8 +53,6 @@
     });
   }
 
-  }, 10000);
-  }
 
   /* Education Search Feature */
   function initEducationSearch() {
@@ -639,12 +637,12 @@
         const condModal = document.getElementById('cond-modal');
         if(!condModal) return;
         const body = condModal.querySelector('.modal-body'); body.innerHTML = '';
-        if(!condObj){ body.textContent = 'No conditions available.'; condModal.classList.add('open'); condModal.setAttribute('aria-hidden','false'); return; }
+        if(!condObj){ body.textContent = 'No conditions available.'; body.style.color = '#eaf3ea'; condModal.classList.add('open'); condModal.setAttribute('aria-hidden','false'); return; }
         const wrap = document.createElement('div'); wrap.className = 'cond-modal-body';
-        wrap.innerHTML = `<p style="margin-top:0; color: #dfffe8;">${title || 'Conditions'} for <strong>Bubble Gummy Auto</strong></p>`;
+        wrap.innerHTML = `<p style="margin-top:0; color: #dfffe8 !important;">${title || 'Conditions'} for <strong style="color: #dfffe8 !important;">Bubble Gummy Auto</strong></p>`;
         const list = document.createElement('dl');
         list.style.display = 'grid'; list.style.gridTemplateColumns = '1fr 1fr'; list.style.gap = '.5rem'; list.style.marginTop = '.5rem';
-        function addRow(k,v){ if(v === undefined || v === null) return; list.innerHTML += `<div><dt style="font-weight:700;color:#eaf3ea">${k}</dt><dd style="margin:0;color:#cfe9d8">${v}</dd></div>`; }
+        function addRow(k,v){ if(v === undefined || v === null) return; list.innerHTML += `<div><dt style="font-weight:700;color:#dfffe8 !important;">${k}</dt><dd style="margin:0;color:#cfe9d8 !important;">${v}</dd></div>`; }
         addRow('Day', condObj.day || condObj.Day || condObj['day'] || '');
         addRow('Light cycle', condObj.light || condObj['Light cycle'] || '');
         addRow('Temperature', (condObj.temp || condObj.Temperature) || '');
@@ -652,7 +650,7 @@
         addRow('VPD', condObj.vpd || condObj.VPD || '');
         addRow('Lights', (condObj.lights || condObj.Lights) || '');
         wrap.appendChild(list);
-        const foot = document.createElement('div'); foot.style.marginTop = '.75rem'; foot.innerHTML = `<button class="btn btn-primary" id="cond-edit-from-modal">Edit conditions</button>`;
+        const foot = document.createElement('div'); foot.style.marginTop = '.75rem'; foot.innerHTML = `<button class="btn btn-primary" id="cond-edit-from-modal" style="background: var(--brand); color: white; padding: 0.5rem 1rem; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">Edit conditions</button>`;
         wrap.appendChild(foot);
         body.appendChild(wrap);
         // wire edit
@@ -688,5 +686,702 @@
       // fail silently if not on plant page
     }
   }
+
+  /* =========== Redesigned Plant Selector =========== */
+  function initPlantSelector() {
+    try {
+      const plantCards = $$('.plant-card');
+      const plantDetails = $$('.plant-detail');
+      
+      if (plantCards.length === 0) return;
+
+      // Handle plant card clicks
+      plantCards.forEach(card => {
+        card.addEventListener('click', function() {
+          const plantId = this.getAttribute('data-plant');
+          
+          // Don't switch if clicking on empty placeholder
+          if (this.classList.contains('plant-card-empty')) return;
+          
+          // Update active card
+          plantCards.forEach(c => c.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Show corresponding detail view
+          plantDetails.forEach(detail => {
+            detail.classList.remove('active');
+            if (detail.id === `plant-detail-${plantId}`) {
+              detail.classList.add('active');
+            }
+          });
+
+          // Smooth scroll to detail
+          const detailSection = $(`#plant-detail-${plantId}`);
+          if (detailSection) {
+            setTimeout(() => {
+              detailSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+          }
+        });
+      });
+
+      // Enhanced stats editing for redesigned layout
+      const editBtn = $('#edit-conditions');
+      const condForm = $('#cond-form');
+      const cancelBtn = $('#cond-cancel');
+      
+      if (editBtn && condForm) {
+        editBtn.addEventListener('click', () => {
+          const isVisible = condForm.style.display !== 'none';
+          condForm.style.display = isVisible ? 'none' : 'block';
+          
+          if (!isVisible) {
+            // Populate form with current values
+            const day = $('#stat-light')?.closest('.plant-detail')?.querySelector('[data-germinated]');
+            if (day) {
+              const germDate = new Date(day.getAttribute('data-germinated'));
+              const now = new Date();
+              const daysSince = Math.floor((now - germDate) / (1000 * 60 * 60 * 24));
+              condForm.elements['day'].value = daysSince;
+            }
+            condForm.elements['light'].value = $('#stat-light')?.textContent || '';
+            condForm.elements['temp'].value = $('#stat-temp')?.textContent.replace('°F', '') || '';
+            condForm.elements['rh'].value = $('#stat-rh')?.textContent.replace('%', '') || '';
+            condForm.elements['vpd'].value = $('#stat-vpd')?.textContent.replace(' kPa', '') || '';
+            condForm.elements['lights'].value = $('#stat-lights')?.textContent.replace('%', '') || '';
+            
+            // Smooth scroll to form
+            condForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        });
+        
+        if (cancelBtn) {
+          cancelBtn.addEventListener('click', () => {
+            condForm.style.display = 'none';
+          });
+        }
+        
+        condForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          // Update displayed values
+          const light = condForm.elements['light'].value;
+          const temp = condForm.elements['temp'].value;
+          const rh = condForm.elements['rh'].value;
+          const vpd = condForm.elements['vpd'].value;
+          const lights = condForm.elements['lights'].value;
+          
+          if ($('#stat-light')) $('#stat-light').textContent = light;
+          if ($('#stat-temp')) $('#stat-temp').textContent = temp + '°F';
+          if ($('#stat-rh')) $('#stat-rh').textContent = rh + '%';
+          if ($('#stat-vpd')) $('#stat-vpd').textContent = vpd + ' kPa';
+          if ($('#stat-lights')) $('#stat-lights').textContent = lights + '%';
+          
+          // Save to localStorage
+          try {
+            const conditions = { light, temp, rh, vpd, lights };
+            localStorage.setItem('plant_conditions_redesign', JSON.stringify(conditions));
+          } catch (e) {}
+          
+          // Hide form with animation
+          condForm.style.display = 'none';
+          
+          // Show success feedback
+          const statsHeader = $('.stats-header');
+          if (statsHeader) {
+            const feedback = document.createElement('span');
+            feedback.textContent = '✓ Saved';
+            feedback.style.cssText = 'color: var(--brand); font-weight: 600; font-size: 0.9rem; animation: fadeIn 0.3s ease;';
+            statsHeader.appendChild(feedback);
+            setTimeout(() => feedback.remove(), 2000);
+          }
+        });
+        
+        // Load saved conditions on page load
+        try {
+          const saved = localStorage.getItem('plant_conditions_redesign');
+          if (saved) {
+            const conditions = JSON.parse(saved);
+            if ($('#stat-light')) $('#stat-light').textContent = conditions.light || '20/4';
+            if ($('#stat-temp')) $('#stat-temp').textContent = (conditions.temp || '78') + '°F';
+            if ($('#stat-rh')) $('#stat-rh').textContent = (conditions.rh || '45') + '%';
+            if ($('#stat-vpd')) $('#stat-vpd').textContent = (conditions.vpd || '1.8') + ' kPa';
+            if ($('#stat-lights')) $('#stat-lights').textContent = (conditions.lights || '80') + '%';
+          }
+        } catch (e) {}
+      }
+
+      // Enhanced notes system for redesigned layout
+      const noteForm = $('#note-form');
+      const notesList = $('#notes-list');
+      
+      if (noteForm && notesList) {
+        function loadNotes() {
+          try {
+            const raw = localStorage.getItem('plant_notes_redesign');
+            return raw ? JSON.parse(raw) : [];
+          } catch (e) {
+            return [];
+          }
+        }
+        
+        function saveNotes(notes) {
+          try {
+            localStorage.setItem('plant_notes_redesign', JSON.stringify(notes));
+          } catch (e) {}
+        }
+        
+        function renderNotes() {
+          const notes = loadNotes();
+          if (notes.length === 0) {
+            notesList.innerHTML = '<div style="text-align:center; padding:2rem; color:var(--muted)">No notes yet. Add your first care note above.</div>';
+            return;
+          }
+          
+          notesList.innerHTML = notes.map(note => `
+            <div class="note-item">
+              <div class="note-date">${note.date}</div>
+              <div class="note-content">${note.text}</div>
+            </div>
+          `).join('');
+        }
+        
+        noteForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          const text = noteForm.elements['note'].value.trim();
+          if (!text) return;
+          
+          const date = new Date().toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric', 
+            year: 'numeric' 
+          });
+          
+          const notes = loadNotes();
+          notes.unshift({ date, text });
+          saveNotes(notes);
+          renderNotes();
+          noteForm.reset();
+          
+          // Add a little success animation
+          const addBtn = noteForm.querySelector('button[type="submit"]');
+          if (addBtn) {
+            const originalText = addBtn.innerHTML;
+            addBtn.innerHTML = '✓ Added';
+            addBtn.style.background = 'var(--brand)';
+            setTimeout(() => {
+              addBtn.innerHTML = originalText;
+              addBtn.style.background = '';
+            }, 1500);
+          }
+        });
+        
+        // Initial render
+        renderNotes();
+      }
+
+      // Animate stat cards on page load
+      const statCards = $$('.stat-card');
+      statCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+          card.style.transition = 'all 0.4s ease';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, index * 50);
+      });
+
+    } catch (e) {
+      // Fail silently if not on redesigned plants page
+    }
+  }
+
+  /* =========== Dashboard Actions & Tracking =========== */
+  function initDashboardActions() {
+    try {
+      const actionModal = $('#action-modal');
+      const actionForm = $('#action-form');
+      const modalTitle = actionModal ? actionModal.querySelector('h3') : null;
+      const amountGroup = $('#amount-group');
+      const nutrientsGroup = $('#nutrients-group');
+      
+      if (!actionModal || !actionForm) {
+        console.log('Action modal or form not found');
+        return;
+      }
+      
+      // LocalStorage helpers
+      function loadPlantData() {
+        try {
+          const raw = localStorage.getItem('plant_tracking_data');
+          return raw ? JSON.parse(raw) : {};
+        } catch (e) {
+          return {};
+        }
+      }
+      
+      function savePlantData(data) {
+        try {
+          localStorage.setItem('plant_tracking_data', JSON.stringify(data));
+        } catch (e) {}
+      }
+      
+      function calculateDaysSince(dateString) {
+        if (!dateString) return null;
+        const then = new Date(dateString);
+        const now = new Date();
+        const diff = Math.floor((now - then) / (1000 * 60 * 60 * 24));
+        return diff;
+      }
+      
+      // Open modal
+      function openActionModal(actionType, plantId) {
+        console.log('openActionModal called:', actionType, plantId);
+        console.log('actionModal:', actionModal);
+        console.log('actionForm:', actionForm);
+        
+        const titles = {
+          water: '💧 Water Plant',
+          feed: '🌱 Feed Plant',
+          note: '📝 Add Note'
+        };
+        
+        if (modalTitle) {
+          modalTitle.textContent = titles[actionType] || 'Log Action';
+        }
+        
+        // Set hidden fields
+        const typeField = actionForm.elements['action-type'];
+        const plantField = actionForm.elements['plant-id'];
+        
+        if (typeField) typeField.value = actionType;
+        if (plantField) plantField.value = plantId;
+        
+        // Set current datetime
+        const now = new Date();
+        const dateTimeLocal = now.toISOString().slice(0, 16);
+        const dateField = actionForm.elements['action-datetime'];
+        if (dateField) dateField.value = dateTimeLocal;
+        
+        // Show/hide conditional fields
+        if (amountGroup) {
+          amountGroup.style.display = (actionType === 'water' || actionType === 'feed') ? 'block' : 'none';
+        }
+        if (nutrientsGroup) {
+          nutrientsGroup.style.display = (actionType === 'feed') ? 'block' : 'none';
+        }
+        
+        // Clear form fields safely
+        const amountField = actionForm.elements['action-amount'];
+        const nutrientsField = actionForm.elements['action-nutrients'];
+        const notesField = actionForm.elements['action-notes'];
+        
+        if (amountField) amountField.value = '';
+        if (nutrientsField) nutrientsField.value = '';
+        if (notesField) notesField.value = '';
+        
+        console.log('Adding active class to modal');
+        actionModal.classList.add('active');
+        
+        // Focus first visible input
+        if (amountField && amountGroup && amountGroup.style.display !== 'none') {
+          amountField.focus();
+        } else if (notesField) {
+          notesField.focus();
+        }
+      }
+      
+      // Close modal
+      function closeActionModal() {
+        actionModal.classList.remove('active');
+      }
+      
+      // Update care tracking display
+      function updateCareTracking(plantId, actionType, dateTime) {
+        const plantCard = $(`.plant-card[data-plant="${plantId}"]`);
+        if (!plantCard) return;
+        
+        const careTracking = plantCard.querySelector('.care-tracking');
+        if (!careTracking) return;
+        
+        const days = calculateDaysSince(dateTime);
+        const daysText = days === 0 ? 'Today' : days === 1 ? '1 day ago' : `${days} days ago`;
+        
+        if (actionType === 'water') {
+          const waterValue = careTracking.querySelector('.care-item:nth-child(1) .care-value');
+          if (waterValue) waterValue.textContent = daysText;
+        } else if (actionType === 'feed') {
+          const feedValue = careTracking.querySelector('.care-item:nth-child(2) .care-value');
+          if (feedValue) feedValue.textContent = daysText;
+        }
+      }
+      
+      // Update tasks dashboard
+      function updateTasksDashboard() {
+        const plantData = loadPlantData();
+        const wateringList = $('#watering-due-list');
+        const feedingList = $('#feeding-due-list');
+        
+        if (!wateringList || !feedingList) return;
+        
+        const wateringDue = [];
+        const feedingDue = [];
+        
+        // Check each plant
+        Object.keys(plantData).forEach(plantId => {
+          const plant = plantData[plantId];
+          if (!plant.lastWatered && !plant.lastFed) return; // Skip germinating plants
+          
+          // Check watering (every 2-3 days)
+          if (plant.lastWatered) {
+            const daysSince = calculateDaysSince(plant.lastWatered);
+            if (daysSince >= 2) {
+              wateringDue.push({ id: plantId, name: plant.name || plantId, days: daysSince });
+            }
+          }
+          
+          // Check feeding (every 5-7 days)
+          if (plant.lastFed) {
+            const daysSince = calculateDaysSince(plant.lastFed);
+            if (daysSince >= 5) {
+              feedingDue.push({ id: plantId, name: plant.name || plantId, days: daysSince });
+            }
+          }
+        });
+        
+        // Update watering list
+        if (wateringDue.length === 0) {
+          wateringList.innerHTML = '<div class="task-item"><p style="margin:0; color: #6c757d;">All caught up! 🎉</p></div>';
+        } else {
+          wateringList.innerHTML = wateringDue.map(p => `
+            <div class="task-item">
+              <p><strong>${p.name}</strong></p>
+              <p class="task-detail">Last watered ${p.days} days ago</p>
+            </div>
+          `).join('');
+        }
+        
+        // Update feeding list
+        if (feedingDue.length === 0) {
+          feedingList.innerHTML = '<div class="task-item"><p style="margin:0; color: #6c757d;">All caught up! 🎉</p></div>';
+        } else {
+          feedingList.innerHTML = feedingDue.map(p => `
+            <div class="task-item">
+              <p><strong>${p.name}</strong></p>
+              <p class="task-detail">Last fed ${p.days} days ago</p>
+            </div>
+          `).join('');
+        }
+      }
+      
+      // Add timeline entry
+      function addTimelineEntry(plantId, actionType, dateTime, amount, nutrients, notes) {
+        const detailView = $(`#plant-detail-${plantId}`);
+        if (!detailView) return;
+        
+        const timeline = detailView.querySelector('.timeline');
+        if (!timeline) return;
+        
+        const icons = { water: '💧', feed: '🌱', note: '📝' };
+        const titles = { water: 'Watered', feed: 'Fed', note: 'Note Added' };
+        const badges = { water: 'badge-info', feed: 'badge-success', note: 'badge-primary' };
+        
+        const date = new Date(dateTime);
+        const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        
+        let description = '';
+        if (actionType === 'water' && amount) description = `Amount: ${amount}`;
+        if (actionType === 'feed' && amount && nutrients) description = `${amount} of ${nutrients}`;
+        if (notes) description += (description ? '. ' : '') + notes;
+        
+        const entry = document.createElement('div');
+        entry.className = 'timeline-entry';
+        entry.setAttribute('data-type', actionType);
+        entry.innerHTML = `
+          <div class="entry-dot"></div>
+          <div class="entry-content">
+            <time>${dateStr}</time>
+            <h3>${icons[actionType]} ${titles[actionType]} <span class="badge ${badges[actionType]}">${actionType}</span></h3>
+            ${description ? `<p>${description}</p>` : ''}
+          </div>
+        `;
+        
+        // Insert at top of timeline
+        timeline.insertBefore(entry, timeline.firstChild);
+      }
+      
+      // Handle action button clicks
+      const actionButtons = $$('.btn-action');
+      console.log('Found action buttons:', actionButtons.length);
+      
+      actionButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          const action = btn.getAttribute('data-action');
+          const plant = btn.getAttribute('data-plant');
+          console.log('Button clicked:', action, plant);
+          openActionModal(action, plant);
+        });
+      });
+      
+      // Handle form submission
+      actionForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const actionType = actionForm.elements['action-type'].value;
+        const plantId = actionForm.elements['plant-id'].value;
+        const dateTime = actionForm.elements['action-datetime'].value;
+        const amount = actionForm.elements['action-amount'] ? actionForm.elements['action-amount'].value : '';
+        const nutrients = actionForm.elements['action-nutrients'] ? actionForm.elements['action-nutrients'].value : '';
+        const notes = actionForm.elements['action-notes'] ? actionForm.elements['action-notes'].value : '';
+        
+        // Load current data
+        const plantData = loadPlantData();
+        
+        // Initialize plant if not exists
+        if (!plantData[plantId]) {
+          plantData[plantId] = {
+            name: plantId,
+            logs: []
+          };
+        }
+        
+        // Update last action dates
+        if (actionType === 'water') {
+          plantData[plantId].lastWatered = dateTime;
+        } else if (actionType === 'feed') {
+          plantData[plantId].lastFed = dateTime;
+        }
+        
+        // Add log entry
+        plantData[plantId].logs.unshift({
+          type: actionType,
+          date: dateTime,
+          amount: amount,
+          nutrients: nutrients,
+          notes: notes
+        });
+        
+        // Save data
+        savePlantData(plantData);
+        
+        // Update UI
+        updateCareTracking(plantId, actionType, dateTime);
+        addTimelineEntry(plantId, actionType, dateTime, amount, nutrients, notes);
+        updateTasksDashboard();
+        
+        // DOPAMINE EFFECTS! 🎉
+        const messages = {
+          water: ['💧 Watered successfully!', '💦 Plant hydrated!', '🌊 Great watering!'],
+          feed: ['🌱 Nutrients added!', '🍃 Fed successfully!', '💚 Plant nourished!'],
+          note: ['📝 Note saved!', '✍️ Logged successfully!', '📋 Note added!']
+        };
+        const icons = {
+          water: '💧',
+          feed: '🌱',
+          note: '📝'
+        };
+        
+        const messageList = messages[actionType] || ['✓ Action logged!'];
+        const message = messageList[Math.floor(Math.random() * messageList.length)];
+        
+        // Show success notification
+        showSuccessNotification(message, icons[actionType]);
+        
+        // Create confetti at modal center
+        const modalRect = actionModal.getBoundingClientRect();
+        createConfetti(modalRect.left + modalRect.width / 2, modalRect.top + modalRect.height / 2);
+        
+        // Celebrate the plant card
+        const plantCard = $(`.plant-card[data-plant="${plantId}"]`);
+        if (plantCard) {
+          celebrateElement(plantCard);
+          
+          // Add shimmer effect briefly
+          plantCard.classList.add('shimmer');
+          setTimeout(() => plantCard.classList.remove('shimmer'), 2000);
+        }
+        
+        // Close modal with slight delay for effect
+        setTimeout(() => closeActionModal(), 300);
+      });
+      
+      // Handle cancel button
+      const cancelBtn = actionModal.querySelector('.btn-cancel');
+      if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeActionModal);
+      }
+      
+      // Close on backdrop click
+      actionModal.addEventListener('click', (e) => {
+        if (e.target === actionModal) {
+          closeActionModal();
+        }
+      });
+      
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && actionModal.classList.contains('active')) {
+          closeActionModal();
+        }
+      });
+      
+      // Initialize with saved data
+      updateTasksDashboard();
+      
+      // Update care tracking from saved data
+      const plantData = loadPlantData();
+      Object.keys(plantData).forEach(plantId => {
+        const plant = plantData[plantId];
+        if (plant.lastWatered) updateCareTracking(plantId, 'water', plant.lastWatered);
+        if (plant.lastFed) updateCareTracking(plantId, 'feed', plant.lastFed);
+      });
+      
+    } catch (e) {
+      console.error('Dashboard actions error:', e);
+    }
+  }
+  
+  /* =========== Timeline Filtering =========== */
+  function initTimelineFilters() {
+    try {
+      const filterBtns = $$('.filter-btn');
+      
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const filter = this.getAttribute('data-filter');
+          
+          // Update active button
+          filterBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Find timeline entries in active plant detail
+          const activePlantDetail = $('.plant-detail.active');
+          if (!activePlantDetail) return;
+          
+          const entries = activePlantDetail.querySelectorAll('.timeline-entry');
+          
+          entries.forEach(entry => {
+            if (filter === 'all') {
+              entry.style.display = '';
+            } else {
+              const type = entry.getAttribute('data-type');
+              entry.style.display = type === filter ? '' : 'none';
+            }
+          });
+        });
+      });
+      
+    } catch (e) {
+      // Not on plants page or no filters
+    }
+  }
+  
+  /* =========== DOPAMINE EFFECTS =========== */
+  function showSuccessNotification(message, icon = '✓') {
+    const notification = document.createElement('div');
+    notification.className = 'success-notification';
+    notification.innerHTML = `
+      <span class="checkmark">${icon}</span>
+      <span>${message}</span>
+    `;
+    document.body.appendChild(notification);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+      notification.classList.add('fade-out');
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+  
+  function createRipple(event) {
+    const button = event.currentTarget;
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = event.clientX - rect.left - size / 2;
+    const y = event.clientY - rect.top - size / 2;
+    
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    
+    button.appendChild(ripple);
+    
+    setTimeout(() => ripple.remove(), 600);
+  }
+  
+  function createConfetti(x, y) {
+    const colors = ['#2f9e44', '#37b34a', '#4caf50', '#66bb6a', '#81c784'];
+    const shapes = ['▀', '▄', '■', '●', '♦'];
+    
+    for (let i = 0; i < 15; i++) {
+      const confetti = document.createElement('div');
+      confetti.className = 'confetti-piece';
+      confetti.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+      confetti.style.left = x + (Math.random() * 100 - 50) + 'px';
+      confetti.style.top = y + 'px';
+      confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
+      confetti.style.fontSize = (Math.random() * 20 + 10) + 'px';
+      confetti.style.animationDelay = (Math.random() * 0.3) + 's';
+      confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      
+      document.body.appendChild(confetti);
+      
+      setTimeout(() => confetti.remove(), 5000);
+    }
+  }
+  
+  function celebrateElement(element) {
+    element.classList.add('celebrating');
+    setTimeout(() => element.classList.remove('celebrating'), 500);
+  }
+  
+  function addRippleEffect() {
+    // Add ripple to all action buttons
+    $$('.btn-action, .btn-save, .btn-primary').forEach(btn => {
+      if (!btn.classList.contains('ripple-container')) {
+        btn.classList.add('ripple-container');
+        btn.addEventListener('click', createRipple);
+      }
+    });
+  }
+
+  /* Initialize all functions */
+  document.addEventListener('DOMContentLoaded', () => {
+    initNavToggle();
+    markActiveNav();
+    initSmoothScroll();
+    initEducationSearch();
+    initPlantPage();
+    initPlantSelector(); // New redesigned plant selector
+    initDashboardActions(); // Dashboard functionality
+    initTimelineFilters(); // Timeline filtering
+    addRippleEffect(); // Add satisfying ripple effects
+    
+    // Add celebration effect to plant cards on click
+    $$('.plant-card').forEach(card => {
+      card.addEventListener('click', function() {
+        if (!this.classList.contains('active')) {
+          celebrateElement(this);
+        }
+      });
+    });
+    
+    // Add hover sound-like feedback to stat cards
+    $$('.stat-card').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-4px) scale(1.02)';
+      });
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0) scale(1)';
+      });
+    });
+  });
 
 })();
