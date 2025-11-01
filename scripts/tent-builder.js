@@ -859,7 +859,7 @@ function generatePDF() {
         // Alternating background colors for readability
         if (index % 2 === 0) {
             doc.setFillColor(250, 250, 250);
-            doc.rect(15, yPos - 5, 180, 9, 'F');
+            doc.rect(15, yPos - 4, 180, 8, 'F');
         }
         
         doc.setFontSize(10);
@@ -869,13 +869,13 @@ function generatePDF() {
         
         doc.setFont(undefined, 'normal');
         doc.setTextColor(...colors.dark);
-        doc.text(value, 70, yPos);
+        doc.text(value, 75, yPos);
         
-        yPos += 9;
+        yPos += 8;
     });
     
     // Equipment Checklist
-    yPos += 15;
+    yPos += 12;
     
     // Section header
     doc.setFillColor(...colors.light);
@@ -885,7 +885,7 @@ function generatePDF() {
     doc.setFont(undefined, 'bold');
     doc.text('EQUIPMENT CHECKLIST', 20, yPos);
     
-    yPos += 12;
+    yPos += 13;
     doc.setFontSize(10);
     doc.setFont(undefined, 'normal');
     doc.setTextColor(...colors.text);
@@ -911,13 +911,13 @@ function generatePDF() {
         doc.setLineWidth(0.5);
         doc.rect(18, yPos - 3, 4, 4);
         
-        // Bullet point and text
+        // Item text
         doc.setFontSize(10);
         doc.setTextColor(...colors.text);
-        doc.text('[ ]', 18, yPos);
-        doc.text(item, 28, yPos);
+        doc.setFont(undefined, 'normal');
+        doc.text(item, 26, yPos);
         
-        yPos += 8;
+        yPos += 7;
         
         // Page break if needed
         if (yPos > 270 && index < equipment.length - 1) {
@@ -938,7 +938,7 @@ function generatePDF() {
     doc.setFont(undefined, 'bold');
     doc.text('STEP-BY-STEP SETUP INSTRUCTIONS', 20, yPos);
     
-    yPos += 15;
+    yPos += 18;
     doc.setFontSize(10);
     doc.setFont(undefined, 'normal');
     
@@ -958,27 +958,28 @@ function generatePDF() {
     instructions.forEach((inst, index) => {
         // Step number circle
         doc.setFillColor(...colors.accent);
-        doc.circle(20, yPos - 1, 4, 'F');
+        doc.circle(20, yPos, 4, 'F');
         doc.setTextColor(255, 255, 255);
         doc.setFontSize(10);
         doc.setFont(undefined, 'bold');
-        doc.text(inst.step, 20, yPos + 1, { align: 'center' });
+        doc.text(inst.step, 20, yPos + 1.5, { align: 'center' });
         
         // Title
         doc.setTextColor(...colors.dark);
         doc.setFontSize(11);
-        doc.text(inst.title, 28, yPos);
+        doc.setFont(undefined, 'bold');
+        doc.text(inst.title, 28, yPos + 1);
         
         // Description
         doc.setFontSize(9);
         doc.setFont(undefined, 'normal');
         doc.setTextColor(...colors.text);
-        const lines = doc.splitTextToSize(inst.desc, 160);
+        const lines = doc.splitTextToSize(inst.desc, 165);
         lines.forEach((line, lineIndex) => {
-            doc.text(line, 28, yPos + 5 + (lineIndex * 5));
+            doc.text(line, 28, yPos + 7 + (lineIndex * 4));
         });
         
-        yPos += 10 + (lines.length * 5);
+        yPos += 12 + (lines.length * 4);
         
         // Page break if needed
         if (yPos > 260 && index < instructions.length - 1) {
@@ -1004,32 +1005,36 @@ function generatePDF() {
     const tipsHeaderLabel = builderData.experience.charAt(0).toUpperCase() + builderData.experience.slice(1);
     doc.text(`PRO TIPS FOR ${tipsHeaderLabel.toUpperCase()} GROWERS`, 20, yPos);
     
-    yPos += 12;
+    yPos += 15;
     
     const tips = getTipsForExperience();
     tips.forEach((tip, index) => {
+        // Calculate height needed for tip box
+        doc.setFontSize(9);
+        const lines = doc.splitTextToSize(tip, 158);
+        const boxHeight = 6 + (lines.length * 4);
+        
         // Tip box
         doc.setFillColor(255, 252, 245);
         doc.setDrawColor(...colors.accent);
         doc.setLineWidth(0.5);
-        doc.roundedRect(18, yPos - 5, 174, 10, 2, 2, 'FD');
+        doc.roundedRect(18, yPos - 2, 174, boxHeight, 2, 2, 'FD');
         
         // Bullet point
         doc.setTextColor(...colors.accent);
         doc.setFontSize(10);
         doc.setFont(undefined, 'bold');
-        doc.text('*', 22, yPos);
+        doc.text('>', 22, yPos + 2);
         
         // Tip text
         doc.setFontSize(9);
         doc.setTextColor(...colors.dark);
         doc.setFont(undefined, 'normal');
-        const lines = doc.splitTextToSize(tip, 162);
         lines.forEach((line, lineIndex) => {
-            doc.text(line, 28, yPos + (lineIndex * 4));
+            doc.text(line, 28, yPos + 2 + (lineIndex * 4));
         });
         
-        yPos += 12 + (Math.max(0, lines.length - 1) * 4);
+        yPos += boxHeight + 3;
         
         // Page break if needed
         if (yPos > 265 && index < tips.length - 1) {
