@@ -3,11 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grow Tent Builder - Educational Configurator</title>
+    <title>Grow Tent Builder - Borough Botanicals</title>
+    <meta name="description" content="Design your perfect grow tent setup with our interactive builder. Educational guidance for beginners to advanced growers.">
+    <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/tent-builder.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/logo-32.png">
 </head>
 <body>
-    <div class="container">
+    <header class="site-header">
+        <div class="container">
+            <div class="logo">
+                <img src="assets/logo.png" srcset="assets/logo@2x.png 2x" alt="Borough Botanicals logo" class="site-logo" />
+                <span class="site-title">Borough Botanicals</span>
+            </div>
+            <nav id="main-nav" class="nav" aria-label="Main Navigation">
+                <a href="index.html">Home</a>
+                <a href="products.html">Products</a>
+                <a href="plants.html">Plants</a>
+                <a href="education.html">Education</a>
+                <a href="tent-builder.html">Tent Builder</a>
+                <a href="about.html">About</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <button class="nav-toggle" aria-expanded="false" aria-controls="main-nav">Menu</button>
+        </div>
+    </header>
+
+    <div class="tent-builder-wrapper">
         <header>
             <h1>🌱 Grow Tent Builder</h1>
             <p>Design your perfect grow setup - we'll guide you every step of the way</p>
@@ -210,8 +232,17 @@
         </div>
     </div>
 
+    </div>
+
+    <footer class="site-footer container">
+        <div class="text-center">
+            <div>© <span id="year">2025</span> Borough Botanicals</div>
+        </div>
+    </footer>
+
     <!-- Include jsPDF library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="scripts/main.js"></script>
     <script src="scripts/tent-builder.js"></script>
 </body>
 </html>
