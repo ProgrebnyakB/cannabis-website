@@ -817,7 +817,8 @@ function generatePDF() {
     
     // Date and experience badge
     doc.setFontSize(9);
-    doc.text(`Generated: ${new Date().toLocaleDateString()}`, 150, 15, { align: 'right' });
+    const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    doc.text(`Generated: ${new Date().toLocaleDateString('en-US', dateOptions)}`, 150, 15, { align: 'right' });
     
     // Experience level badge
     const experienceBadgeLabel = builderData.experience.charAt(0).toUpperCase() + builderData.experience.slice(1);
@@ -849,7 +850,7 @@ function generatePDF() {
     // Summary data in card format
     const summaryData = [
         ['Tent Size', builderData.tentSize.toUpperCase()],
-        ['Growing Medium', builderData.medium.charAt(0).toUpperCase() + builderData.medium.slice(1)],
+        ['Growing Medium', getMediumSummary()],
         ['Container Type', getPotTypeLabel(builderData.potType)],
         ['Pot Size', `${builderData.potSize} gallons`],
         ['Number of Plants', builderData.plantCount.toString()],
@@ -948,7 +949,7 @@ function generatePDF() {
         { step: '2', title: 'Install Ventilation', desc: 'Mount the exhaust fan and carbon filter at the top of the tent for optimal air exchange.' },
         { step: '3', title: 'Hang Grow Light', desc: `Position your light ${getLightHeight()} inches above where plant tops will be.` },
         { step: '4', title: 'Add Circulation', desc: 'Place oscillating fans to create gentle air movement throughout the canopy.' },
-        { step: '5', title: 'Prepare Containers', desc: `Fill your ${getPotTypeLabel(builderData.potType).toLowerCase()} with ${getMediumDescription().toLowerCase()}.` },
+        { step: '5', title: 'Prepare Growing System', desc: getContainerSetupDescription() },
         { step: '6', title: 'Setup Timer', desc: 'Program light timer: 18/6 (18 hours on) for vegetative, 12/12 for flowering.' },
         { step: '7', title: 'Calibrate Equipment', desc: 'Test and calibrate your pH meter and other monitoring devices.' },
         { step: '8', title: 'Plant Seeds/Clones', desc: 'Carefully plant your genetics, ensuring proper depth and spacing.' },
@@ -1076,6 +1077,18 @@ function getNutrientLabel() {
     return builderData.nutrients.line.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
 }
 
+function getMediumSummary() {
+    const medium = builderData.medium;
+    if (medium === 'hydro') {
+        const hydroType = builderData.mediumDetails.hydroType;
+        if (hydroType && hydroType !== 'custom') {
+            return hydroType.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+        return builderData.mediumDetails.customHydro || 'Hydroponic';
+    }
+    return medium.charAt(0).toUpperCase() + medium.slice(1);
+}
+
 function getMediumDescription() {
     const medium = builderData.medium;
     if (medium === 'soil') {
@@ -1091,7 +1104,12 @@ function getMediumDescription() {
         }
         return builderData.mediumDetails.customCoco || 'Coco coir medium';
     } else {
-        return 'Hydroponic system';
+        // Hydro
+        const hydroType = builderData.mediumDetails.hydroType;
+        if (hydroType && hydroType !== 'custom') {
+            return hydroType.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) + ' System';
+        }
+        return builderData.mediumDetails.customHydro || 'Hydroponic system';
     }
 }
 
@@ -1114,6 +1132,14 @@ function getRecommendedWattage() {
 
 function getLightHeight() {
     return builderData.plantType === 'auto' ? '18-24' : '24-36';
+}
+
+function getContainerSetupDescription() {
+    if (builderData.medium === 'hydro') {
+        return `Set up your ${getMediumDescription().toLowerCase()} and prepare net pots or growing sites for your plants.`;
+    } else {
+        return `Fill your ${getPotTypeLabel(builderData.potType).toLowerCase()} with ${getMediumDescription().toLowerCase()}.`;
+    }
 }
 
 function getNutrientScheduleNote() {
