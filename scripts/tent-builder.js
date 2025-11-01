@@ -1,12 +1,27 @@
-// Tent Builder Logic - Isolated from main site
+// Tent Builder Logic - Enhanced version
 
 // Configuration data
 const builderData = {
     experience: null,
     tentSize: null,
     medium: null,
-    plantCount: null,
+    mediumDetails: {
+        soilBrand: null,
+        customSoil: null,
+        cocoRatio: null,
+        customCoco: null,
+        hydroType: null,
+        customHydro: null
+    },
+    potType: null,
     potSize: null,
+    plantCount: null,
+    nutrients: {
+        line: null,
+        customNutrient: null,
+        gaiaProducts: [],
+        supplements: null
+    },
     plantType: null,
     strainType: null
 };
@@ -21,7 +36,7 @@ const tentCapacity = {
 
 // Current step tracker
 let currentStep = 1;
-const totalSteps = 6;
+const totalSteps = 8;
 
 // Initialize the builder
 document.addEventListener('DOMContentLoaded', function() {
@@ -37,9 +52,22 @@ function setupEventListeners() {
         });
     });
 
-    // Form inputs
+    // Medium detail dropdowns
+    document.getElementById('soil-brand')?.addEventListener('change', handleSoilSelection);
+    document.getElementById('coco-ratio')?.addEventListener('change', handleCocoSelection);
+    document.getElementById('hydro-type')?.addEventListener('change', handleHydroSelection);
+
+    // Container selections
+    document.getElementById('pot-type')?.addEventListener('change', savePotType);
+    document.getElementById('pot-size')?.addEventListener('change', savePotSize);
+
+    // Plant count
     document.getElementById('plant-count')?.addEventListener('change', validatePlantSetup);
-    document.getElementById('pot-size')?.addEventListener('change', validatePlantSetup);
+
+    // Nutrient selections
+    document.getElementById('nutrient-line')?.addEventListener('change', handleNutrientSelection);
+    
+    // Genetics
     document.getElementById('plant-type')?.addEventListener('change', saveGeneticsData);
     document.getElementById('strain-type')?.addEventListener('change', saveGeneticsData);
 
@@ -74,6 +102,7 @@ function handleCardSelection(card) {
         case 'step-3':
             builderData.medium = value;
             showMediumWarning(value);
+            showMediumDetails(value);
             break;
     }
     
@@ -87,17 +116,136 @@ function showMediumWarning(medium) {
     }
 }
 
+function showMediumDetails(medium) {
+    // Show the medium details container
+    const mediumDetails = document.getElementById('medium-details');
+    mediumDetails.style.display = 'block';
+    
+    // Hide all specific sections
+    document.getElementById('soil-details').style.display = 'none';
+    document.getElementById('coco-details').style.display = 'none';
+    document.getElementById('hydro-details').style.display = 'none';
+    
+    // Show the relevant section
+    if (medium === 'soil') {
+        document.getElementById('soil-details').style.display = 'block';
+    } else if (medium === 'coco') {
+        document.getElementById('coco-details').style.display = 'block';
+    } else if (medium === 'hydro') {
+        document.getElementById('hydro-details').style.display = 'block';
+    }
+}
+
+function handleSoilSelection() {
+    const soilBrand = document.getElementById('soil-brand').value;
+    builderData.mediumDetails.soilBrand = soilBrand;
+    
+    const customGroup = document.getElementById('custom-soil-group');
+    if (soilBrand === 'custom') {
+        customGroup.style.display = 'block';
+        document.getElementById('custom-soil').addEventListener('input', function() {
+            builderData.mediumDetails.customSoil = this.value;
+        });
+    } else {
+        customGroup.style.display = 'none';
+    }
+}
+
+function handleCocoSelection() {
+    const cocoRatio = document.getElementById('coco-ratio').value;
+    builderData.mediumDetails.cocoRatio = cocoRatio;
+    
+    const customGroup = document.getElementById('custom-coco-group');
+    if (cocoRatio === 'custom') {
+        customGroup.style.display = 'block';
+        document.getElementById('custom-coco').addEventListener('input', function() {
+            builderData.mediumDetails.customCoco = this.value;
+        });
+    } else {
+        customGroup.style.display = 'none';
+    }
+}
+
+function handleHydroSelection() {
+    const hydroType = document.getElementById('hydro-type').value;
+    builderData.mediumDetails.hydroType = hydroType;
+    
+    const customGroup = document.getElementById('custom-hydro-group');
+    if (hydroType === 'custom') {
+        customGroup.style.display = 'block';
+        document.getElementById('custom-hydro').addEventListener('input', function() {
+            builderData.mediumDetails.customHydro = this.value;
+        });
+    } else {
+        customGroup.style.display = 'none';
+    }
+}
+
+function savePotType() {
+    builderData.potType = document.getElementById('pot-type').value;
+    checkStepCompletion();
+}
+
+function savePotSize() {
+    builderData.potSize = parseInt(document.getElementById('pot-size').value);
+    checkStepCompletion();
+}
+
+function handleNutrientSelection() {
+    const nutrientLine = document.getElementById('nutrient-line').value;
+    builderData.nutrients.line = nutrientLine;
+    
+    // Show/hide custom input
+    const customGroup = document.getElementById('custom-nutrient-group');
+    if (nutrientLine === 'custom') {
+        customGroup.style.display = 'block';
+        document.getElementById('custom-nutrient').addEventListener('input', function() {
+            builderData.nutrients.customNutrient = this.value;
+        });
+    } else {
+        customGroup.style.display = 'none';
+    }
+    
+    // Show/hide Gaia Green products
+    const gaiaProducts = document.getElementById('gaia-green-products');
+    if (nutrientLine === 'gaia-green') {
+        gaiaProducts.style.display = 'block';
+        
+        // Setup checkbox listeners
+        document.querySelectorAll('input[name="gaia-product"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                builderData.nutrients.gaiaProducts = Array.from(
+                    document.querySelectorAll('input[name="gaia-product"]:checked')
+                ).map(cb => cb.value);
+            });
+        });
+        
+        // Initialize with checked items
+        builderData.nutrients.gaiaProducts = Array.from(
+            document.querySelectorAll('input[name="gaia-product"]:checked')
+        ).map(cb => cb.value);
+    } else {
+        gaiaProducts.style.display = 'none';
+    }
+    
+    // Save supplements
+    document.getElementById('supplements').addEventListener('input', function() {
+        builderData.nutrients.supplements = this.value;
+    });
+    
+    checkStepCompletion();
+}
+
 function validatePlantSetup() {
     const plantCount = parseInt(document.getElementById('plant-count').value);
-    const potSize = parseInt(document.getElementById('pot-size').value);
     
-    if (!plantCount || !potSize) return;
+    if (!plantCount) return;
     
     builderData.plantCount = plantCount;
-    builderData.potSize = potSize;
     
     const validation = document.getElementById('space-validation');
     const tentData = tentCapacity[builderData.tentSize];
+    const potSize = builderData.potSize || 5; // Default to 5 gallon if not set yet
     
     if (!tentData) {
         validation.innerHTML = '<strong>⚠️ Please select a tent size first</strong>';
@@ -206,9 +354,15 @@ function checkStepCompletion() {
             isComplete = builderData.medium !== null;
             break;
         case 4:
-            isComplete = builderData.plantCount && builderData.potSize;
+            isComplete = builderData.potType && builderData.potSize;
             break;
         case 5:
+            isComplete = builderData.plantCount;
+            break;
+        case 6:
+            isComplete = builderData.nutrients.line;
+            break;
+        case 7:
             isComplete = builderData.plantType && builderData.strainType;
             break;
         default:
@@ -233,6 +387,15 @@ function populateReview() {
         'hydro': 'Hydroponics'
     };
     
+    const potTypeLabels = {
+        'fabric': 'Fabric Pots',
+        'plastic': 'Plastic Pots',
+        'air': 'Air Pots',
+        'smart': 'Smart Pots',
+        'hydro-net': 'Net Pots',
+        'nursery': 'Nursery Pots'
+    };
+    
     const plantTypeLabels = {
         'auto': 'Autoflower',
         'photo': 'Photoperiod'
@@ -243,6 +406,37 @@ function populateReview() {
         'sativa': 'Sativa',
         'hybrid': 'Hybrid'
     };
+    
+    // Build medium details string
+    let mediumDetail = mediumLabels[builderData.medium];
+    if (builderData.medium === 'soil' && builderData.mediumDetails.soilBrand) {
+        const soilBrand = builderData.mediumDetails.soilBrand === 'custom' 
+            ? builderData.mediumDetails.customSoil 
+            : builderData.mediumDetails.soilBrand;
+        mediumDetail += ` (${soilBrand})`;
+    } else if (builderData.medium === 'coco' && builderData.mediumDetails.cocoRatio) {
+        const cocoRatio = builderData.mediumDetails.cocoRatio === 'custom'
+            ? builderData.mediumDetails.customCoco
+            : builderData.mediumDetails.cocoRatio.replace('-', '% Coco / ') + '% Perlite';
+        mediumDetail += ` (${cocoRatio})`;
+    } else if (builderData.medium === 'hydro' && builderData.mediumDetails.hydroType) {
+        const hydroType = builderData.mediumDetails.hydroType === 'custom'
+            ? builderData.mediumDetails.customHydro
+            : builderData.mediumDetails.hydroType.toUpperCase();
+        mediumDetail += ` (${hydroType})`;
+    }
+    
+    // Build nutrient string
+    let nutrientDetail = 'Not specified';
+    if (builderData.nutrients.line) {
+        nutrientDetail = builderData.nutrients.line === 'custom'
+            ? builderData.nutrients.customNutrient
+            : builderData.nutrients.line.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+        
+        if (builderData.nutrients.line === 'gaia-green' && builderData.nutrients.gaiaProducts.length > 0) {
+            nutrientDetail += ' (' + builderData.nutrients.gaiaProducts.length + ' products selected)';
+        }
+    }
     
     summary.innerHTML = `
         <div class="summary-item">
@@ -255,15 +449,23 @@ function populateReview() {
         </div>
         <div class="summary-item">
             <span class="summary-label">Growing Medium:</span>
-            <span class="summary-value">${mediumLabels[builderData.medium]}</span>
+            <span class="summary-value">${mediumDetail}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Container Type:</span>
+            <span class="summary-value">${potTypeLabels[builderData.potType]}</span>
+        </div>
+        <div class="summary-item">
+            <span class="summary-label">Pot Size:</span>
+            <span class="summary-value">${builderData.potSize} gallons</span>
         </div>
         <div class="summary-item">
             <span class="summary-label">Number of Plants:</span>
             <span class="summary-value">${builderData.plantCount}</span>
         </div>
         <div class="summary-item">
-            <span class="summary-label">Pot Size:</span>
-            <span class="summary-value">${builderData.potSize} gallons</span>
+            <span class="summary-label">Nutrient Line:</span>
+            <span class="summary-value">${nutrientDetail}</span>
         </div>
         <div class="summary-item">
             <span class="summary-label">Plant Type:</span>

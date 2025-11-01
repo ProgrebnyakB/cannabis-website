@@ -52,14 +52,22 @@
                 </div>
                 <div class="progress-step" data-step="4">
                     <span class="step-number">4</span>
-                    <span class="step-label">Plants</span>
+                    <span class="step-label">Containers</span>
                 </div>
                 <div class="progress-step" data-step="5">
                     <span class="step-number">5</span>
-                    <span class="step-label">Genetics</span>
+                    <span class="step-label">Plants</span>
                 </div>
                 <div class="progress-step" data-step="6">
                     <span class="step-number">6</span>
+                    <span class="step-label">Nutrients</span>
+                </div>
+                <div class="progress-step" data-step="7">
+                    <span class="step-number">7</span>
+                    <span class="step-label">Genetics</span>
+                </div>
+                <div class="progress-step" data-step="8">
+                    <span class="step-number">8</span>
                     <span class="step-label">Review</span>
                 </div>
             </div>
@@ -144,15 +152,123 @@
                             <span class="difficulty hard">Advanced</span>
                         </div>
                     </div>
+
+                    <!-- Medium-specific details (shown after selection) -->
+                    <div id="medium-details" style="display: none; margin-top: 30px;">
+                        <!-- Soil specific -->
+                        <div id="soil-details" class="medium-detail-section" style="display: none;">
+                            <h3>Soil Brand/Type</h3>
+                            <div class="form-group">
+                                <label for="soil-brand">Choose your soil:</label>
+                                <select id="soil-brand">
+                                    <option value="">Select...</option>
+                                    <option value="fox-farm-ocean">Fox Farm Ocean Forest</option>
+                                    <option value="fox-farm-happy">Fox Farm Happy Frog</option>
+                                    <option value="roots-organic">Roots Organic Original</option>
+                                    <option value="promix-hp">Pro-Mix HP</option>
+                                    <option value="coast-of-maine">Coast of Maine Stonington Blend</option>
+                                    <option value="buildasoil">BuildASoil Living Soil</option>
+                                    <option value="custom">Other (specify below)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="custom-soil-group" style="display: none;">
+                                <label for="custom-soil">Specify your soil:</label>
+                                <input type="text" id="custom-soil" placeholder="Enter soil brand/type">
+                            </div>
+                        </div>
+
+                        <!-- Coco specific -->
+                        <div id="coco-details" class="medium-detail-section" style="display: none;">
+                            <h3>Coco Coir Mix Ratio</h3>
+                            <p class="step-description">Different ratios for different needs</p>
+                            <div class="form-group">
+                                <label for="coco-ratio">Choose your mix:</label>
+                                <select id="coco-ratio">
+                                    <option value="">Select...</option>
+                                    <option value="100-0">100% Coco (maximum water retention)</option>
+                                    <option value="80-20">80% Coco / 20% Perlite (balanced)</option>
+                                    <option value="70-30">70% Coco / 30% Perlite (recommended - good drainage)</option>
+                                    <option value="60-40">60% Coco / 40% Perlite (fast draining)</option>
+                                    <option value="50-50">50% Coco / 50% Perlite (hydroponic-like)</option>
+                                    <option value="custom">Custom ratio (specify below)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="custom-coco-group" style="display: none;">
+                                <label for="custom-coco">Specify your ratio:</label>
+                                <input type="text" id="custom-coco" placeholder="e.g., 75% Coco / 25% Perlite">
+                            </div>
+                            <div class="info-box">
+                                <strong>💡 Pro Tip:</strong> 70/30 mix provides excellent drainage while maintaining good moisture retention - perfect for most grows!
+                            </div>
+                        </div>
+
+                        <!-- Hydro specific -->
+                        <div id="hydro-details" class="medium-detail-section" style="display: none;">
+                            <h3>Hydroponic System Type</h3>
+                            <div class="form-group">
+                                <label for="hydro-type">Choose your system:</label>
+                                <select id="hydro-type">
+                                    <option value="">Select...</option>
+                                    <option value="dwc">Deep Water Culture (DWC)</option>
+                                    <option value="rdwc">Recirculating DWC</option>
+                                    <option value="nft">Nutrient Film Technique (NFT)</option>
+                                    <option value="ebb-flow">Ebb and Flow</option>
+                                    <option value="drip">Drip System</option>
+                                    <option value="aeroponic">Aeroponics</option>
+                                    <option value="custom">Other (specify below)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="custom-hydro-group" style="display: none;">
+                                <label for="custom-hydro">Specify your system:</label>
+                                <input type="text" id="custom-hydro" placeholder="Enter hydro system type">
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Step 4: Number of Plants & Pot Size -->
+                <!-- Step 4: Container Type & Size -->
                 <div class="step-content" id="step-4">
-                    <h2>Plants & Container Size</h2>
-                    <p class="step-description">We'll validate this fits your tent</p>
+                    <h2>Container Selection</h2>
+                    <p class="step-description">Choose your pot type and size</p>
                     
                     <div class="form-group">
-                        <label for="plant-count">Number of Plants:</label>
+                        <label for="pot-type">Pot Type:</label>
+                        <select id="pot-type">
+                            <option value="">Select...</option>
+                            <option value="fabric">Fabric Pots (best airflow, prevents root binding)</option>
+                            <option value="plastic">Plastic Pots (traditional, economical)</option>
+                            <option value="air">Air Pots (maximum air pruning)</option>
+                            <option value="smart">Smart Pots (premium fabric)</option>
+                            <option value="hydro-net">Net Pots (for hydro)</option>
+                            <option value="nursery">Nursery Pots (standard plastic)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pot-size">Pot Size:</label>
+                        <select id="pot-size">
+                            <option value="">Select...</option>
+                            <option value="1">1 gallon (small plants/SOG)</option>
+                            <option value="2">2 gallons (compact grows)</option>
+                            <option value="3">3 gallons (medium plants)</option>
+                            <option value="5">5 gallons (large plants - recommended)</option>
+                            <option value="7">7 gallons (extra large)</option>
+                            <option value="10">10 gallons (maximum size)</option>
+                        </select>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>💡 Tip:</strong> Fabric pots provide superior drainage and air pruning, promoting healthier root development!
+                    </div>
+                </div>
+
+                <!-- Step 5: Number of Plants -->
+                <div class="step-content" id="step-5">
+                    <h2>Number of Plants</h2>
+                    <p class="step-description">We'll validate this fits your tent with your chosen pot size</p>
+                    
+                    <div class="form-group">
+                        <label for="plant-count">How many plants?</label>
                         <select id="plant-count">
                             <option value="">Select...</option>
                             <option value="1">1 plant</option>
@@ -166,22 +282,99 @@
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="pot-size">Pot Size:</label>
-                        <select id="pot-size">
-                            <option value="">Select...</option>
-                            <option value="1">1 gallon (small plants/SOG)</option>
-                            <option value="3">3 gallons (medium plants)</option>
-                            <option value="5">5 gallons (large plants)</option>
-                            <option value="7">7 gallons (extra large)</option>
-                        </select>
-                    </div>
-
                     <div class="validation-message" id="space-validation"></div>
                 </div>
 
-                <!-- Step 5: Genetics -->
-                <div class="step-content" id="step-5">
+                <!-- Step 6: Nutrients -->
+                <div class="step-content" id="step-6">
+                    <h2>Nutrient Selection</h2>
+                    <p class="step-description">Choose your feeding program</p>
+                    
+                    <div class="form-group">
+                        <label for="nutrient-line">Nutrient Brand/Line:</label>
+                        <select id="nutrient-line">
+                            <option value="">Select...</option>
+                            <optgroup label="Organic">
+                                <option value="gaia-green">Gaia Green (recommended)</option>
+                                <option value="down-to-earth">Down to Earth</option>
+                                <option value="dr-earth">Dr. Earth</option>
+                                <option value="buildasoil">BuildASoil</option>
+                            </optgroup>
+                            <optgroup label="Synthetic/Mineral">
+                                <option value="general-hydro">General Hydroponics Flora Series</option>
+                                <option value="advanced-nutrients">Advanced Nutrients</option>
+                                <option value="fox-farm-trio">Fox Farm Trio</option>
+                                <option value="canna">Canna</option>
+                                <option value="megacrop">MegaCrop</option>
+                            </optgroup>
+                            <optgroup label="Living Soil">
+                                <option value="living-soil">Living Soil (water only)</option>
+                            </optgroup>
+                            <option value="custom">Other (specify below)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="custom-nutrient-group" style="display: none;">
+                        <label for="custom-nutrient">Specify your nutrients:</label>
+                        <input type="text" id="custom-nutrient" placeholder="Enter nutrient brand">
+                    </div>
+
+                    <!-- Gaia Green specific products -->
+                    <div id="gaia-green-products" style="display: none; margin-top: 20px;">
+                        <h3>Gaia Green Products</h3>
+                        <p class="step-description">Select the products you'll be using</p>
+                        
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="gaia-product" value="all-purpose-444" checked>
+                                <span>All Purpose (4-4-4) - Vegetative Growth</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="gaia-product" value="power-bloom-284" checked>
+                                <span>Power Bloom (2-8-4) - Flowering</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="gaia-product" value="glacial-rock-dust">
+                                <span>Glacial Rock Dust - Minerals & Trace Elements</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="gaia-product" value="bat-guano">
+                                <span>Seabird Guano / Bat Guano - Phosphorus Boost</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="gaia-product" value="oyster-shell">
+                                <span>Oyster Shell Flour - Calcium</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="gaia-product" value="mykos">
+                                <span>Mycorrhizae (Mykos) - Root Inoculant</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="gaia-product" value="kelp-meal">
+                                <span>Kelp Meal - Growth Stimulator</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="gaia-product" value="worm-castings">
+                                <span>Worm Castings - Soil Amendment</span>
+                            </label>
+                        </div>
+
+                        <div class="info-box" style="margin-top: 15px;">
+                            <strong>🌿 Recommended Schedule:</strong><br>
+                            <strong>Veg:</strong> All Purpose (4-4-4) + Glacial Rock Dust + Mykos<br>
+                            <strong>Flower:</strong> Power Bloom (2-8-4) + Bat Guano + Mykos
+                        </div>
+                    </div>
+
+                    <!-- Additional supplements -->
+                    <div class="form-group" style="margin-top: 25px;">
+                        <label for="supplements">Additional Supplements/Amendments:</label>
+                        <textarea id="supplements" rows="3" placeholder="e.g., CalMag, silica, beneficial bacteria, etc."></textarea>
+                    </div>
+                </div>
+
+                <!-- Step 7: Genetics -->
+                <div class="step-content" id="step-7">
                     <h2>Choose Your Genetics</h2>
                     <p class="step-description">This affects your grow schedule and tent height needs</p>
                     
@@ -205,8 +398,8 @@
                     </div>
                 </div>
 
-                <!-- Step 6: Review & Generate -->
-                <div class="step-content" id="step-6">
+                <!-- Step 8: Review & Generate -->
+                <div class="step-content" id="step-8">
                     <h2>Review Your Setup</h2>
                     <p class="step-description">Here's what we're building for you</p>
                     
