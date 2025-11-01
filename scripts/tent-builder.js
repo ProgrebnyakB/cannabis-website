@@ -786,134 +786,344 @@ function generatePDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
     
+    // Define color scheme
+    const colors = {
+        primary: [76, 175, 80],      // Green
+        secondary: [46, 125, 50],     // Dark green
+        accent: [199, 156, 63],       // Gold
+        dark: [33, 33, 33],
+        light: [245, 245, 245],
+        text: [60, 60, 60]
+    };
+    
+    // Header background
+    doc.setFillColor(...colors.primary);
+    doc.rect(0, 0, 210, 35, 'F');
+    
+    // Logo/Icon (emoji as text)
+    doc.setFontSize(28);
+    doc.text('🌱', 15, 22);
+    
     // Title
-    doc.setFontSize(20);
-    doc.setTextColor(76, 175, 80);
-    doc.text('Your Custom Grow Tent Setup Guide', 20, 20);
+    doc.setFontSize(22);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont(undefined, 'bold');
+    doc.text('Custom Grow Tent Setup Guide', 35, 18);
     
-    // Date
-    doc.setFontSize(10);
-    doc.setTextColor(100, 100, 100);
-    doc.text(`Generated: ${new Date().toLocaleDateString()}`, 20, 28);
-    
-    // Setup Summary
-    doc.setFontSize(14);
-    doc.setTextColor(0, 0, 0);
-    doc.text('Setup Summary', 20, 45);
-    
+    // Subtitle
     doc.setFontSize(11);
-    let yPos = 55;
+    doc.setFont(undefined, 'normal');
+    doc.text('Your personalized growing plan', 35, 26);
     
+    // Date and experience badge
+    doc.setFontSize(9);
+    doc.text(`Generated: ${new Date().toLocaleDateString()}`, 150, 15, { align: 'right' });
+    
+    // Experience level badge
+    const experienceBadgeLabel = builderData.experience.charAt(0).toUpperCase() + builderData.experience.slice(1);
+    const badgeColors = {
+        beginner: [76, 175, 80],
+        intermediate: [255, 152, 0],
+        advanced: [156, 39, 176]
+    };
+    doc.setFillColor(...badgeColors[builderData.experience]);
+    doc.roundedRect(130, 20, 50, 8, 2, 2, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'bold');
+    doc.text(experienceBadgeLabel, 155, 25.5, { align: 'center' });
+    
+    // Setup Summary Section
+    let yPos = 50;
+    
+    // Section header with background
+    doc.setFillColor(...colors.light);
+    doc.rect(15, yPos - 7, 180, 10, 'F');
+    doc.setFontSize(16);
+    doc.setTextColor(...colors.secondary);
+    doc.setFont(undefined, 'bold');
+    doc.text('📋 Setup Summary', 20, yPos);
+    
+    yPos += 15;
+    
+    // Summary data in card format
     const summaryData = [
-        ['Experience Level:', builderData.experience.charAt(0).toUpperCase() + builderData.experience.slice(1)],
-        ['Tent Size:', builderData.tentSize.toUpperCase()],
-        ['Growing Medium:', builderData.medium.charAt(0).toUpperCase() + builderData.medium.slice(1)],
-        ['Number of Plants:', builderData.plantCount.toString()],
-        ['Pot Size:', `${builderData.potSize} gallons`],
-        ['Plant Type:', builderData.plantType === 'auto' ? 'Autoflower' : 'Photoperiod'],
-        ['Strain Type:', builderData.strainType.charAt(0).toUpperCase() + builderData.strainType.slice(1)]
+        ['Tent Size', builderData.tentSize.toUpperCase()],
+        ['Growing Medium', builderData.medium.charAt(0).toUpperCase() + builderData.medium.slice(1)],
+        ['Container Type', getPotTypeLabel(builderData.potType)],
+        ['Pot Size', `${builderData.potSize} gallons`],
+        ['Number of Plants', builderData.plantCount.toString()],
+        ['Nutrients', getNutrientLabel()],
+        ['Plant Type', builderData.plantType === 'auto' ? 'Autoflower' : 'Photoperiod'],
+        ['Strain Type', builderData.strainType.charAt(0).toUpperCase() + builderData.strainType.slice(1)]
     ];
     
-    summaryData.forEach(([label, value]) => {
+    summaryData.forEach(([label, value], index) => {
+        // Alternating background colors for readability
+        if (index % 2 === 0) {
+            doc.setFillColor(250, 250, 250);
+            doc.rect(15, yPos - 5, 180, 9, 'F');
+        }
+        
+        doc.setFontSize(10);
+        doc.setTextColor(...colors.text);
         doc.setFont(undefined, 'bold');
-        doc.text(label, 20, yPos);
+        doc.text(label + ':', 20, yPos);
+        
         doc.setFont(undefined, 'normal');
-        doc.text(value, 80, yPos);
-        yPos += 8;
+        doc.setTextColor(...colors.dark);
+        doc.text(value, 70, yPos);
+        
+        yPos += 9;
     });
     
     // Equipment Checklist
-    yPos += 10;
-    doc.setFontSize(14);
-    doc.setFont(undefined, 'bold');
-    doc.text('Equipment Checklist', 20, yPos);
+    yPos += 15;
     
-    yPos += 10;
-    doc.setFontSize(11);
+    // Section header
+    doc.setFillColor(...colors.light);
+    doc.rect(15, yPos - 7, 180, 10, 'F');
+    doc.setFontSize(16);
+    doc.setTextColor(...colors.secondary);
+    doc.setFont(undefined, 'bold');
+    doc.text('🛠️ Equipment Checklist', 20, yPos);
+    
+    yPos += 12;
+    doc.setFontSize(10);
     doc.setFont(undefined, 'normal');
+    doc.setTextColor(...colors.text);
     
     const equipment = [
-        `☐ Grow Tent (${builderData.tentSize})`,
-        `☐ LED Grow Light (appropriate for ${builderData.tentSize} space)`,
-        `☐ Inline Exhaust Fan with Carbon Filter`,
-        `☐ Oscillating Circulation Fans (2)`,
-        `☐ ${builderData.plantCount}x ${builderData.potSize}-gallon pots`,
-        `☐ ${builderData.medium === 'soil' ? 'Quality potting soil' : builderData.medium === 'coco' ? 'Coco coir medium' : 'Hydroponic system'}`,
-        `☐ Nutrients (appropriate for ${builderData.medium})`,
-        `☐ pH Testing Kit`,
-        `☐ Thermometer/Hygrometer`,
-        `☐ Timer for lights`,
-        `☐ Pruning scissors`,
-        `☐ Watering can or pump`
+        { icon: '🏕️', item: `Grow Tent (${builderData.tentSize})` },
+        { icon: '💡', item: `LED Grow Light (${getRecommendedWattage()} watts recommended)` },
+        { icon: '🌀', item: 'Inline Exhaust Fan with Carbon Filter' },
+        { icon: '💨', item: 'Oscillating Circulation Fans (2)' },
+        { icon: '🪴', item: `${getPotTypeLabel(builderData.potType)} (${builderData.plantCount}x ${builderData.potSize} gal)` },
+        { icon: '🌱', item: getMediumDescription() },
+        { icon: '🧪', item: getNutrientDescription() },
+        { icon: '📊', item: 'pH Testing Kit & Calibration Solution' },
+        { icon: '🌡️', item: 'Digital Thermometer/Hygrometer' },
+        { icon: '⏰', item: 'Digital Timer for lights' },
+        { icon: '✂️', item: 'Pruning scissors/shears' },
+        { icon: '💧', item: 'Watering can or pump' }
     ];
     
-    equipment.forEach(item => {
-        doc.text(item, 25, yPos);
-        yPos += 7;
+    equipment.forEach((eq, index) => {
+        // Checkbox
+        doc.setDrawColor(...colors.primary);
+        doc.setLineWidth(0.5);
+        doc.rect(18, yPos - 3, 4, 4);
+        
+        // Icon and text
+        doc.text(eq.icon, 26, yPos);
+        doc.text(eq.item, 33, yPos);
+        
+        yPos += 8;
+        
+        // Page break if needed
+        if (yPos > 270 && index < equipment.length - 1) {
+            doc.addPage();
+            yPos = 20;
+        }
     });
     
     // New page for instructions
     doc.addPage();
     yPos = 20;
     
+    // Section header
+    doc.setFillColor(...colors.light);
+    doc.rect(15, yPos - 7, 180, 10, 'F');
     doc.setFontSize(16);
+    doc.setTextColor(...colors.secondary);
     doc.setFont(undefined, 'bold');
-    doc.text('Setup Instructions', 20, yPos);
+    doc.text('📖 Step-by-Step Setup Instructions', 20, yPos);
     
     yPos += 15;
-    doc.setFontSize(11);
+    doc.setFontSize(10);
     doc.setFont(undefined, 'normal');
     
     const instructions = [
-        '1. Assemble your grow tent in your chosen location',
-        '2. Install the exhaust fan and carbon filter at the top',
-        '3. Hang your grow light at appropriate height',
-        '4. Position circulation fans for airflow',
-        '5. Place pots with your growing medium inside',
-        '6. Set up light timer (18/6 for veg, 12/12 for flower)',
-        '7. Calibrate pH testing equipment',
-        '8. Plant your seeds/seedlings',
-        '9. Monitor temperature (70-85°F) and humidity (40-70%)',
-        '10. Follow feeding schedule for your chosen medium'
+        { step: '1', title: 'Assemble Your Tent', desc: 'Set up your grow tent in your chosen location with easy access to power and ventilation.' },
+        { step: '2', title: 'Install Ventilation', desc: 'Mount the exhaust fan and carbon filter at the top of the tent for optimal air exchange.' },
+        { step: '3', title: 'Hang Grow Light', desc: `Position your light ${getLightHeight()} inches above where plant tops will be.` },
+        { step: '4', title: 'Add Circulation', desc: 'Place oscillating fans to create gentle air movement throughout the canopy.' },
+        { step: '5', title: 'Prepare Containers', desc: `Fill your ${getPotTypeLabel(builderData.potType).toLowerCase()} with ${getMediumDescription().toLowerCase()}.` },
+        { step: '6', title: 'Setup Timer', desc: 'Program light timer: 18/6 (18 hours on) for vegetative, 12/12 for flowering.' },
+        { step: '7', title: 'Calibrate Equipment', desc: 'Test and calibrate your pH meter and other monitoring devices.' },
+        { step: '8', title: 'Plant Seeds/Clones', desc: 'Carefully plant your genetics, ensuring proper depth and spacing.' },
+        { step: '9', title: 'Monitor Environment', desc: 'Maintain 70-85°F temperature and 40-70% humidity (varies by growth stage).' },
+        { step: '10', title: 'Begin Feeding', desc: getNutrientScheduleNote() }
     ];
     
-    instructions.forEach(instruction => {
-        const lines = doc.splitTextToSize(instruction, 170);
-        lines.forEach(line => {
-            doc.text(line, 20, yPos);
-            yPos += 7;
+    instructions.forEach((inst, index) => {
+        // Step number circle
+        doc.setFillColor(...colors.accent);
+        doc.circle(20, yPos - 1, 4, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'bold');
+        doc.text(inst.step, 20, yPos + 1, { align: 'center' });
+        
+        // Title
+        doc.setTextColor(...colors.dark);
+        doc.setFontSize(11);
+        doc.text(inst.title, 28, yPos);
+        
+        // Description
+        doc.setFontSize(9);
+        doc.setFont(undefined, 'normal');
+        doc.setTextColor(...colors.text);
+        const lines = doc.splitTextToSize(inst.desc, 160);
+        lines.forEach((line, lineIndex) => {
+            doc.text(line, 28, yPos + 5 + (lineIndex * 5));
         });
-        yPos += 3;
+        
+        yPos += 10 + (lines.length * 5);
+        
+        // Page break if needed
+        if (yPos > 260 && index < instructions.length - 1) {
+            doc.addPage();
+            yPos = 20;
+        }
     });
     
     // Tips section
-    yPos += 10;
-    doc.setFontSize(14);
-    doc.setFont(undefined, 'bold');
-    doc.text(`Tips for ${builderData.experience.charAt(0).toUpperCase() + builderData.experience.slice(1)} Growers`, 20, yPos);
+    if (yPos > 200) {
+        doc.addPage();
+        yPos = 20;
+    } else {
+        yPos += 15;
+    }
     
-    yPos += 10;
-    doc.setFontSize(11);
-    doc.setFont(undefined, 'normal');
+    // Section header with gold accent
+    doc.setFillColor(...colors.accent);
+    doc.rect(15, yPos - 7, 180, 10, 'F');
+    doc.setFontSize(16);
+    doc.setTextColor(255, 255, 255);
+    doc.setFont(undefined, 'bold');
+    const tipsHeaderLabel = builderData.experience.charAt(0).toUpperCase() + builderData.experience.slice(1);
+    doc.text(`💡 Pro Tips for ${tipsHeaderLabel} Growers`, 20, yPos);
+    
+    yPos += 12;
     
     const tips = getTipsForExperience();
-    tips.forEach(tip => {
-        const lines = doc.splitTextToSize(`• ${tip}`, 170);
-        lines.forEach(line => {
-            if (yPos > 280) {
-                doc.addPage();
-                yPos = 20;
-            }
-            doc.text(line, 20, yPos);
-            yPos += 7;
+    tips.forEach((tip, index) => {
+        // Tip box
+        doc.setFillColor(255, 252, 245);
+        doc.setDrawColor(...colors.accent);
+        doc.setLineWidth(0.5);
+        doc.roundedRect(18, yPos - 5, 174, 10, 2, 2, 'FD');
+        
+        // Bullet point
+        doc.setTextColor(...colors.accent);
+        doc.setFontSize(12);
+        doc.text('▸', 22, yPos);
+        
+        // Tip text
+        doc.setFontSize(9);
+        doc.setTextColor(...colors.dark);
+        doc.setFont(undefined, 'normal');
+        const lines = doc.splitTextToSize(tip, 162);
+        lines.forEach((line, lineIndex) => {
+            doc.text(line, 28, yPos + (lineIndex * 4));
         });
+        
+        yPos += 12 + (Math.max(0, lines.length - 1) * 4);
+        
+        // Page break if needed
+        if (yPos > 265 && index < tips.length - 1) {
+            doc.addPage();
+            yPos = 20;
+        }
     });
     
+    // Footer on last page
+    yPos = 280;
+    doc.setFillColor(...colors.primary);
+    doc.rect(0, yPos, 210, 17, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(9);
+    doc.setFont(undefined, 'italic');
+    doc.text('Happy Growing! 🌿', 105, yPos + 7, { align: 'center' });
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(8);
+    doc.text('Generated by Borough Botanicals Tent Builder', 105, yPos + 12, { align: 'center' });
+    
     // Save the PDF
-    doc.save('grow-tent-setup-guide.pdf');
+    doc.save('borough-botanicals-grow-guide.pdf');
     
     // Show success message
-    alert('Your custom grow guide has been generated! Check your downloads folder.');
+    alert('🎉 Your custom grow guide has been generated! Check your downloads folder.');
+}
+
+// Helper functions for PDF content
+function getPotTypeLabel(potType) {
+    const labels = {
+        'fabric': 'Fabric Pots',
+        'plastic': 'Plastic Pots',
+        'air': 'Air Pots',
+        'smart': 'Smart Pots',
+        'hydro-net': 'Net Pots',
+        'nursery': 'Nursery Pots'
+    };
+    return labels[potType] || 'Pots';
+}
+
+function getNutrientLabel() {
+    if (!builderData.nutrients.line) return 'Not specified';
+    if (builderData.nutrients.line === 'custom') return builderData.nutrients.customNutrient;
+    return builderData.nutrients.line.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+}
+
+function getMediumDescription() {
+    const medium = builderData.medium;
+    if (medium === 'soil') {
+        const brand = builderData.mediumDetails.soilBrand;
+        if (brand && brand !== 'custom') {
+            return brand.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        }
+        return builderData.mediumDetails.customSoil || 'Quality potting soil';
+    } else if (medium === 'coco') {
+        const ratio = builderData.mediumDetails.cocoRatio;
+        if (ratio && ratio !== 'custom') {
+            return `Coco coir (${ratio.replace('-', '/')} mix)`;
+        }
+        return builderData.mediumDetails.customCoco || 'Coco coir medium';
+    } else {
+        return 'Hydroponic system';
+    }
+}
+
+function getNutrientDescription() {
+    if (builderData.nutrients.line === 'gaia-green' && builderData.nutrients.gaiaProducts.length > 0) {
+        return `Gaia Green (${builderData.nutrients.gaiaProducts.length} products)`;
+    }
+    return getNutrientLabel();
+}
+
+function getRecommendedWattage() {
+    const wattages = {
+        '2x2': '100-150',
+        '3x3': '200-300',
+        '4x4': '400-600',
+        '5x5': '600-800'
+    };
+    return wattages[builderData.tentSize] || '300-500';
+}
+
+function getLightHeight() {
+    return builderData.plantType === 'auto' ? '18-24' : '24-36';
+}
+
+function getNutrientScheduleNote() {
+    if (builderData.nutrients.line === 'gaia-green') {
+        return 'Top dress with Gaia Green amendments every 2-3 weeks. Start light and increase as plants mature.';
+    } else if (builderData.medium === 'soil') {
+        return 'Begin light feeding after 2-3 weeks. Follow manufacturer\'s schedule at 50% strength initially.';
+    } else {
+        return 'Follow your nutrient line\'s feeding schedule, starting at 50% strength and adjusting based on plant response.';
+    }
 }
 
 function getTipsForExperience() {
