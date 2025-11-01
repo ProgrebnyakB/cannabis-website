@@ -368,11 +368,52 @@
 
 /* Info boxes */
 .info-box {
-    background: #e3f2fd;
-    border-left: 4px solid #2196F3;
+    background: linear-gradient(135deg, #c79c3f 0%, #f4d791 50%, #c79c3f 100%);
+    background-size: 200% 100%;
+    border-left: 4px solid #a67c26;
     padding: 15px;
     border-radius: 8px;
     margin-top: 15px;
+    color: #2d2416;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(199, 156, 63, 0.3);
+    animation: shimmer 3s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.info-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shimmerSlide 3s ease-in-out infinite;
+}
+
+.info-box strong {
+    color: #1a1308;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+@keyframes shimmer {
+    0%, 100% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 0%;
+    }
+}
+
+@keyframes shimmerSlide {
+    0% {
+        left: -100%;
+    }
+    50%, 100% {
+        left: 100%;
+    }
 }
 
 /* Checkbox group styling */
